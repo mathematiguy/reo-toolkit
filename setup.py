@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 with open('requirements.txt', 'r') as f:
-    reqs = f.read().split()[:-1]
+    reqs = f.read().split('\n')[:-2]
 
 setup(
     name='reo_toolkit',
