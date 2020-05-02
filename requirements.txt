@@ -1,0 +1,4 @@
+pytest
+nltk
+jamo
+-e /code
