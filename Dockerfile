@@ -18,6 +18,8 @@ ENV LANGUAGE en_NZ:en
 # Install python + other things
 RUN apt install -y python3-dev python3-pip
 
+# Install jupyterlab
+RUN pip3 install jupyter jupyterlab ipython pandas numpy matplotlib jsonlines
 COPY . /code
 COPY requirements.txt /root/requirements.txt
 RUN pip3 install -r /root/requirements.txt
