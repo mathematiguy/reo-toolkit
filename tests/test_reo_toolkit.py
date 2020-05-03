@@ -1,4 +1,4 @@
-from reo_toolkit import is_maori
+from reo_toolkit import is_maori, ambiguous
 
 def test_māori_word():
     assert is_maori('Ko matou ko nga Tino Rangatira o nga iwi o Nu Tireni', verbose = True)

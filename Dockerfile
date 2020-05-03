@@ -20,6 +20,9 @@ RUN apt install -y python3-dev python3-pip
 
 # Install jupyterlab
 RUN pip3 install jupyter jupyterlab ipython pandas numpy matplotlib jsonlines
+
 COPY . /code
 COPY requirements.txt /root/requirements.txt
 RUN pip3 install -r /root/requirements.txt
+
+RUN python3 -m nltk.downloader punkt
