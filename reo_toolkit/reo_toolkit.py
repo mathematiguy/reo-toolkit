@@ -1,11 +1,15 @@
+import os
 import re
 
 from .utils import pairwise
 from .encoders import BaseEncoder
 
-vowels = list('aeiouāēīōū')
-consonants = list("hkmnprtwŋƒ")
+vowels = list(r'AEIOUĀĒĪŌŪaeiouāēīōū\-')
+consonants = list("HKMNPRTWŊƑhkmnprtwŋƒ")
 numbers = list(map(str, range(10)))
+
+with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') as f:
+    ambiguous = set(f.read().split())
 
 
 def is_maori(text, verbose=False):
@@ -25,7 +29,7 @@ def is_maori(text, verbose=False):
         return False
 
     # Remove non alphabet characters
-    text = re.sub(r"[^{}0-9\s]".format(''.join(consonants + vowels)), "",
+    text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants + vowels)), "",
                   text).strip()
 
     if len(text) == 0:
@@ -39,6 +43,12 @@ def is_maori(text, verbose=False):
             if verbose:
                 print("Single character word {} is not a vowel".format(text))
             return False
+
+    if text[0] == "-":
+        if verbose:
+            "Starts with hyphen and no preceding letter"
+        return False
+
     for current_ch, next_ch in pairwise(text):
         if current_ch not in consonants + vowels + numbers + [" "]:
             # Character not in maori character set
@@ -62,6 +72,11 @@ def is_maori(text, verbose=False):
         if verbose:
             print("The last character '{}' is a consonant: {}".format(
                 next_ch, text))
+        return False
+    if next_ch == "-" and not current_ch in vowels:
+        if verbose:
+            print("The next character is {} but the current character {} is not a vowel"\
+                  .format(next_ch, current_ch))
         return False
     return True
 

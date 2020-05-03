@@ -13,5 +13,6 @@ setup(
     install_requires=reqs,
     url='https://github.com/TeHikuMedia/reo-toolkit',
     author='Caleb Moses',
-    author_email='caleb@dragonfly.co.nz'
+    author_email='caleb@dragonfly.co.nz',
+    include_package_data=True
 )
