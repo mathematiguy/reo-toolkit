@@ -1,16 +1,16 @@
 from reo_toolkit.encoders import NoEncoder, BaseEncoder, ShortmoraEncoder, MoraEncoder, SyllableEncoder
 
 def test_no_encode():
-    assert NoEncoder().encode("text") == "text"
+    assert NoEncoder().encode("Text") == "Text"
 
 def test_no_decode():
-    assert NoEncoder().decode("text") == "text"
+    assert NoEncoder().decode("Text") == "Text"
 
 def test_base_encode():
-    assert BaseEncoder().encode("whiti mai te ra") == "ƒiti mai te ra"
+    assert BaseEncoder().encode("Whiti mai te ra") == "Ƒiti mai te ra"
 
 def test_base_decode():
-    assert BaseEncoder().decode("ƒiti mai te ra") == "whiti mai te ra"
+    assert BaseEncoder().decode("Ƒiti mai te ra") == "Whiti mai te ra"
 
 def test_shortmora_encode():
     assert ShortmoraEncoder().encode("Tēnā koe") == "Teenaa koe"
