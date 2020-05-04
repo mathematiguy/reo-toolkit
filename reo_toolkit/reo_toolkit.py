@@ -2,6 +2,8 @@ import os
 import re
 
 from .utils import pairwise
+from functools import lru_cache
+
 from .encoders import BaseEncoder
 
 vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
@@ -14,6 +16,7 @@ with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') a
 
 
 def is_maori(text, verbose=False):
+@lru_cache(maxsize=1024)
     '''
     Returns True if the text provided matches Māori orthographical rules.
 
