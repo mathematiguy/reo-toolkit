@@ -4,9 +4,10 @@ import re
 from .utils import pairwise
 from .encoders import BaseEncoder
 
-vowels = list(r'AEIOUĀĒĪŌŪaeiouāēīōū\-')
-consonants = list("HKMNPRTWŊƑhkmnprtwŋƒ")
-numbers = list(map(str, range(10)))
+vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
+consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
+numbers = set(map(str, range(10)))
+
 
 with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') as f:
     ambiguous = set(f.read().split())
@@ -29,7 +30,7 @@ def is_maori(text, verbose=False):
         return False
 
     # Remove non alphabet characters
-    text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants + vowels)), "",
+    text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
                   text).strip()
 
     if len(text) == 0:
@@ -50,7 +51,7 @@ def is_maori(text, verbose=False):
         return False
 
     for current_ch, next_ch in pairwise(text):
-        if current_ch not in consonants + vowels + numbers + [" "]:
+        if current_ch not in consonants.union(vowels).union(numbers).union(set(" ")):
             # Character not in maori character set
             if verbose:
                 print("Character '{}' not in maori character set".format(
