@@ -19,9 +19,8 @@ def prepare_numbers(text):
     while True:
         if "£" in text:
             start, finish = re.search("£[0-9]+", text).span()
-            text = text[:start] + text[start +
-                                       1:finish] + " pāuna " + text[finish +
-                                                                    1:]
+            text = text[:start] + text[start +1:finish] + \
+                str.rstrip(" pāuna " + text[finish +1:])
         elif "$" in text:
             start, finish = re.search(r"\$[0-9]+", text).span()
             text = text[:start] + text[start +1:finish] + \
