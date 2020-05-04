@@ -8,6 +8,7 @@ UID ?= $(shell id -u)
 GID ?= $(shell id -g)
 DOCKER_ARGS ?= 
 GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
+LOG_LEVEL ?= DEBUG
 
 .PHONY: test jupyter docker-login docker docker-push docker-pull enter enter-root
 
