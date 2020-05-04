@@ -17,12 +17,13 @@ with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') a
 
 _triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
 
-def is_maori(text, verbose=False):
 @lru_cache(maxsize=1024)
+def is_maori(text, drop_ambiguous=True):
     '''
     Returns True if the text provided matches Māori orthographical rules.
 
-    If verbose == True, when the test fails the rules `is_maori` will tell you why it failed.
+    `drop_ambiguous` - tell `is_maori` whether to ignore common english words that pass the
+    orthography check based on a list of terms
     '''
 
     text = BaseEncoder().encode(text.lower())
