@@ -1,3 +1,7 @@
+AI
+ARU
+NIWA
+OIO
 a
 aa
 aaa
@@ -53,6 +57,7 @@ eureka
 euro
 europa
 europe
+ewe
 ha
 haha
 hai
@@ -146,6 +151,7 @@ memo
 menu
 mere
 meta
+metoo
 mi
 mia
 miami
@@ -155,7 +161,6 @@ mimi
 mine
 mini
 miniature
-minute
 minute
 mio
 mira
@@ -181,6 +186,7 @@ nato
 nature
 nauru
 ne
+nee
 nemo
 neo
 nero
@@ -303,6 +309,7 @@ tahoe
 tai
 taipei
 take
+tangerine
 tango
 tao
 tape
@@ -328,6 +335,7 @@ tongue
 toni
 too
 topeka
+tore
 tori
 torino
 tote
@@ -345,6 +353,7 @@ uni
 unite
 uno
 urine
+ute
 utopia
 uu
 wa
