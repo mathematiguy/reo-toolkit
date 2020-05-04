@@ -24,13 +24,18 @@ def is_maori(text, drop_ambiguous = False):
     orthography check based on a list of terms
     '''
 
-    text = BaseEncoder().encode(text.lower())
+    text = text.strip()
 
-    non_maori_chars = set(ch for ch in text if ch in 'bcdfgjlqsvxyz')
-    if len(non_maori_chars) > 0:
-        logging.debug("Text contains non-maori letters: {}".format(
-            ', '.join(non_maori_chars)))
-        return False
+    splitter = re.compile(r'[ \n\-]{1,}')
+    if splitter.search(text):
+        # Split the text and evaluate each piece
+        results = []
+        for split in splitter.split(text):
+            if len(split) == 0:
+                logging.debug("Text {} gives an empty string when split".format(text))
+                return False
+            results.append(is_maori(split))
+        return all(results)
 
     if is_camel_case(text):
         return all(is_maori(sub.lower()) for sub in camel_case_split(text))
