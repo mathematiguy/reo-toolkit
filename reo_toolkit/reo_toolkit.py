@@ -15,6 +15,7 @@ numbers = set(map(str, range(10)))
 with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') as f:
     ambiguous = set(f.read().split())
 
+_triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
 
 def is_maori(text, verbose=False):
 @lru_cache(maxsize=1024)
@@ -53,6 +54,8 @@ def is_maori(text, verbose=False):
 
     if "-" in text:
         return all(is_maori(sub) for sub in text.split("-"))
+
+    if _triple_vowels.search(text):
         return False
 
     for current_ch, next_ch in pairwise(text):
