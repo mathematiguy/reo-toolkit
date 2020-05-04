@@ -18,16 +18,37 @@ class NoEncoder:
 
 
 class BaseEncoder:
+
+    encoder_dict = {
+        'Ng': 'Ŋ',
+        'Wh': 'Ƒ',
+        'ng': 'ŋ',
+        'wh': 'ƒ'
+    }
+
+    decoder_dict = {v: k for k, v in encoder_dict.items()}
+
     def encode(self, text):
-        return text.replace('ng', 'ŋ').replace('wh', 'ƒ')
+        for k, v in self.encoder_dict.items():
+            text = text.replace(k, v)
+        return text
 
     def decode(self, text):
-        return text.replace('ŋ', 'ng').replace('ƒ', 'wh')
+        for k, v in self.decoder_dict.items():
+            text = text.replace(k, v)
+        return text
 
 
 class ShortmoraEncoder:
 
     encoder_dict = {
+        'Ā': 'Aa',
+        'Ē': 'Ee',
+        'Ī': 'Ii',
+        'O': 'Oo',
+        'U': 'Uu',
+        'Ng': 'Ŋ',
+        'Wh': 'Ƒ',
         'ā': 'aa',
         'ē': 'ee',
         'ī': 'ii',
@@ -53,6 +74,18 @@ class ShortmoraEncoder:
 class MoraEncoder:
 
     encoder_dict = {
+        'ae': 'Æ',
+        'ai': 'Á',
+        'ao': 'Å',
+        'au': 'Ä',
+        'ei': 'É',
+        'eu': 'Ë',
+        'iu': 'Ï',
+        'oe': 'Œ',
+        'oi': 'Ó',
+        'ou': 'Ö',
+        'ng': 'Ŋ',
+        'wh': 'Ƒ',
         'ae': 'æ',
         'ai': 'á',
         'ao': 'å',
@@ -84,24 +117,24 @@ class SyllableEncoder:
 
     encoder_dict = {
         'a': 'ᅡ',
-        'h': 'ᄒ',
         'ā': 'ᅣ',
-        'k': 'ᄏ',
-        'e': 'ᅦ',
-        'm': 'ᄆ',
         'ē': 'ᅨ',
-        'n': 'ᄂ',
+        'e': 'ᅦ',
         'i': 'ᅥ',
-        'p': 'ᄑ',
         'ī': 'ᅧ',
-        'r': 'ᄅ',
         'o': 'ᅩ',
-        't': 'ᄐ',
         'ō': 'ᅭ',
-        'w': 'ᄇ',
         'u': 'ᅮ',
-        'ŋ': 'ᄉ',
         'ū': 'ᅲ',
+        'h': 'ᄒ',
+        'k': 'ᄏ',
+        'm': 'ᄆ',
+        'n': 'ᄂ',
+        'p': 'ᄑ',
+        'r': 'ᄅ',
+        't': 'ᄐ',
+        'w': 'ᄇ',
+        'ŋ': 'ᄉ',
         'ƒ': 'ᄌ',
         'x': 'ᄋ'
     }
