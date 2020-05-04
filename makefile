@@ -14,6 +14,9 @@ GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
 test:
 	$(RUN) pytest -v --log-level $(LOG_LEVEL)
 
+daemon: DOCKER_ARGS= -dit --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name="rdev"
+daemon:
+	$(RUN) R
 
 JUPYTER_PASSWORD ?= jupyter
 JUPYTER_PORT ?= 8888
