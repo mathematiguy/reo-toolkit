@@ -12,7 +12,8 @@ GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
 .PHONY: test jupyter docker-login docker docker-push docker-pull enter enter-root
 
 test:
-	$(RUN) pytest -v
+	$(RUN) pytest -v --log-level $(LOG_LEVEL)
+
 
 JUPYTER_PASSWORD ?= jupyter
 JUPYTER_PORT ?= 8888
