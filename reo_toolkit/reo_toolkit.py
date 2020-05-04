@@ -2,29 +2,25 @@ import os
 import re
 import logging
 
-from .utils import pairwise
 from inflection import camelize
 from functools import lru_cache
 
 from .utils import pairwise, is_camel_case, camel_case_split
+from .wordlists import ambiguous, non_maori
 from .encoders import BaseEncoder
 
 vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
 consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
 numbers = set(map(str, range(10)))
 
-
-with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') as f:
-    ambiguous = set(f.read().split())
-
 _triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
 
 @lru_cache(maxsize=1024)
-def is_maori(text, drop_ambiguous=True):
+def is_maori(text, drop_ambiguous = False):
     '''
     Returns True if the text provided matches Māori orthographical rules.
 
-    `drop_ambiguous` - tell `is_maori` whether to ignore common english words that pass the
+    `drop_non_maori` - tell `is_maori` whether to ignore common english words that pass the
     orthography check based on a list of terms
     '''
 
@@ -44,12 +40,18 @@ def is_maori(text, drop_ambiguous=True):
     text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
                   text).strip()
 
-    if text in ambiguous and drop_ambiguous:
         return False
 
     if len(text) == 0:
         # String is empty
         logging.debug("String is empty after cleaning")
+
+    if text in non_maori:
+        logging.debug("Text {} is in non_maori word list".format(text))
+        return False
+
+    if drop_ambiguous and text in ambiguous:
+        logging.debug("Text {} is in ambiguous word list".format(text))
         return False
 
     if len(text) == 1:
