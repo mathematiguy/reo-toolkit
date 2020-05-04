@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 
 from .utils import pairwise
 from functools import lru_cache
@@ -27,37 +28,37 @@ def is_maori(text, verbose=False):
 
     non_maori_chars = set(ch for ch in text if ch in 'bcdfgjlqsvxyz')
     if len(non_maori_chars) > 0:
-        if verbose:
-            print("Text contains non-maori letters: {}".format(
-                ', '.join(non_maori_chars)))
+        logging.debug("Text contains non-maori letters: {}".format(
+            ', '.join(non_maori_chars)))
         return False
 
     # Remove non alphabet characters
     text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
                   text).strip()
 
+    if text in ambiguous and drop_ambiguous:
+        return False
+
     if len(text) == 0:
         # String is empty
-        if verbose: print("String is empty after cleaning")
+        logging.debug("String is empty after cleaning")
         return False
+
     if len(text) == 1:
         if text in vowels:
             return True
         else:
-            if verbose:
-                print("Single character word {} is not a vowel".format(text))
+            logging.debug("Single character word {} is not a vowel".format(text))
             return False
 
-    if text[0] == "-":
-        if verbose:
-            "Starts with hyphen and no preceding letter"
+    if "-" in text:
+        return all(is_maori(sub) for sub in text.split("-"))
         return False
 
     for current_ch, next_ch in pairwise(text):
         if current_ch not in consonants.union(vowels).union(numbers).union(set(" ")):
             # Character not in maori character set
-            if verbose:
-                print("Character '{}' not in maori character set".format(
+            logging.debug("Character '{}' not in maori character set".format(
                     current_ch))
             return False
         if current_ch in consonants:
@@ -67,20 +68,19 @@ def is_maori(text, verbose=False):
                 continue
             else:
                 # The next character is not a vowel, this is not ok
-                if verbose:
-                    print("The consonant '{}' is followed by '{}' instead of a vowel: {}"\
+                logging.debug("The consonant '{}' is followed by '{}' instead of a vowel: {}"\
                                   .format(current_ch, next_ch, text))
                 return False
+
     if next_ch in consonants:
         # Last character in word is a consonant
-        if verbose:
-            print("The last character '{}' is a consonant: {}".format(
+        logging.debug("The last character '{}' is a consonant: {}".format(
                 next_ch, text))
         return False
+
     if next_ch == "-" and not current_ch in vowels:
-        if verbose:
-            print("The next character is {} but the current character {} is not a vowel"\
+        logging.debug("The next character is {} but the current character {} is not a vowel"\
                   .format(next_ch, current_ch))
         return False
-    return True
 
+    return True
