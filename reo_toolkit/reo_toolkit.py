@@ -3,8 +3,10 @@ import re
 import logging
 
 from .utils import pairwise
+from inflection import camelize
 from functools import lru_cache
 
+from .utils import pairwise, is_camel_case, camel_case_split
 from .encoders import BaseEncoder
 
 vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
@@ -33,6 +35,10 @@ def is_maori(text, drop_ambiguous=True):
         logging.debug("Text contains non-maori letters: {}".format(
             ', '.join(non_maori_chars)))
         return False
+
+    if is_camel_case(text):
+        return all(is_maori(sub.lower()) for sub in camel_case_split(text))
+
 
     # Remove non alphabet characters
     text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
