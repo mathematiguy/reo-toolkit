@@ -43,15 +43,15 @@ def is_maori(text, drop_ambiguous = False):
     raw_text = text
     text = BaseEncoder().encode(text)
 
-    # Remove non alphabet characters
-    text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
-                  text).strip()
-
     non_maori_chars = set(ch for ch in text.lower() if ch in 'bcdfgjlqsvxyz')
     if len(non_maori_chars) > 0:
         logging.debug("Text contains non-maori letters: {}".format(
             ', '.join(non_maori_chars)))
         return False
+
+    # Remove non alphabet characters
+    text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
+                  text).strip()
 
     if len(text) == 0:
         if re.search('[A-z]', raw_text):

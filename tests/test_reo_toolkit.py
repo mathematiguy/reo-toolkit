@@ -7,6 +7,10 @@ def test_māori_word():
 def test_english_word():
     assert not is_maori('James Cook')
 
+def test_cleaning():
+    # This non-maori word gives a maori word 'i' after the non-maori characters are removed
+    assert not is_maori("six")
+
 def test_hyphen():
     assert not is_maori('-maori')
 
@@ -32,3 +36,4 @@ def test_he_whakaputanga():
     with open('data/he-whakaputanga.txt', 'r') as f:
         transcript = f.read()
         assert is_maori(transcript)
+
