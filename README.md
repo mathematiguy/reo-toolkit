@@ -12,4 +12,6 @@ This repo makes use of unit tests using the `pytest` library. Run `make test` to
 
 ## entr
 
-[Entr](http://eradman.com/entrproject/) is a command line utility which when given a collection of files, will run a given command automatically. I like to run `find . -type f | entr make test`, which runs the unit tests automatically whenever a file in the repository is changed.
+[Entr](http://eradman.com/entrproject/) is a command line utility which when given a collection of files, will run a given command automatically.
+
+I like to run `find . -type f | entr make test`, which runs the unit tests automatically whenever a file in the repository is changed.
