@@ -8,7 +8,7 @@ This project requires [GNU make](https://www.gnu.org/software/make/) + [Docker](
 
 First install make and docker, then run `make docker` to build the docker container in your local environment.
 
-## Unit tests
+## Pytest
 
 This repo makes use of unit tests using the `pytest` library. Run `make test` to run all of the unit tests.
 
