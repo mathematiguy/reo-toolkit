@@ -6,7 +6,7 @@ A python package for manipulating māori language text
 
 This project requires [GNU make](https://www.gnu.org/software/make/) + [Docker](https://www.docker.com/) in order to work. GNU make is used for build automation, while Docker is used to build virtual environments that make the code reproducible in separate computing environments.
 
-# Unit tests
+## Unit tests
 
 This repo makes use of unit tests using the `pytest` library. Run `make test` to run all of the unit tests.
 
