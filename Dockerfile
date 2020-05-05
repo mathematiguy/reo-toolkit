@@ -16,3 +16,4 @@ RUN python3 -m nltk.downloader punkt
 
 RUN Rscript -e 'install.packages("here")'
 RUN Rscript -e 'install.packages("furrr")'
+
