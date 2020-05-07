@@ -8,12 +8,14 @@ UID ?= $(shell id -u)
 GID ?= $(shell id -g)
 DOCKER_ARGS ?= 
 GIT_TAG ?= $(shell git log --oneline | head -n1 | awk '{print $$1}')
+NUM_CORES ?= $(shell expr `grep -c ^processor /proc/cpuinfo` - 1)
+MULTICORE ?=
 LOG_LEVEL ?= DEBUG
 
 .PHONY: test jupyter docker-login docker docker-push docker-pull enter enter-root
 
 test:
-	$(RUN) pytest -v --log-level $(LOG_LEVEL)
+	$(RUN) pytest -vv $(if $(MULTICORE), -n $(NUM_CORES)) --durations 10 --log-level $(LOG_LEVEL)
 
 daemon: DOCKER_ARGS= -dit --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name="rdev"
 daemon:
@@ -58,3 +60,4 @@ enter-root: UID=root
 enter-root: GID=root
 enter-root:
 	$(RUN) bash
+

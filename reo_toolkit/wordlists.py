@@ -1,9 +1,15 @@
 import os
+from ahocorasick import Automaton
 
 from .encoders import BaseEncoder
 
-with open(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'), 'r') as f:
-    ambiguous = set(BaseEncoder().encode(t) for t in f.read().split())
+def make_wordlist(filepath):
+    with open(filepath, 'r') as f:
+        wordlist = Automaton()
+        for idx, word in enumerate(set(BaseEncoder().encode(t) for t in f.read().split())):
+            wordlist.add_word(word, (idx, word))
+            wordlist.make_automaton()
+    return wordlist
 
-with open(os.path.join(os.path.dirname(__file__), 'non_maori_terms.txt'), 'r') as f:
-    non_maori = set(BaseEncoder().encode(t) for t in f.read().split())
+ambiguous = make_wordlist(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'))
+non_maori = make_wordlist(os.path.join(os.path.dirname(__file__), 'non_maori_terms.txt'))

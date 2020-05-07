@@ -5,7 +5,19 @@ def test_māori_word():
     assert is_maori('Ko matou ko nga Tino Rangatira o nga iwi o Nu Tireni')
 
 def test_english_word():
-    assert not is_maori('James Cook')
+    assert not is_maori('James Cooks')
+
+def test_double_consonant():
+    assert not is_maori('mmea')
+
+def test_ending_consonant():
+    assert not is_maori('new')
+
+def test_non_maori_letter():
+    assert not is_maori('z')
+
+def test_ambiguous_word():
+    assert not is_maori('a', strict = True)
 
 def test_cleaning():
     # This non-maori word gives a maori word 'i' after the non-maori characters are removed
@@ -36,4 +48,3 @@ def test_he_whakaputanga():
     with open('data/he-whakaputanga.txt', 'r') as f:
         transcript = f.read()
         assert is_maori(transcript)
-

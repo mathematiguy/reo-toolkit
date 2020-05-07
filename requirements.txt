@@ -2,4 +2,5 @@ pytest
 nltk
 jamo
 inflection
+pyahocorasick
 -e /code

@@ -13,20 +13,31 @@ vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
 consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
 numbers = set(map(str, range(10)))
 
-_triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
+double_consonants = re.compile('[{}][^{}]'.format(''.join(consonants), ''.join(vowels)))
+non_maori_letters = re.compile('[bcdfgjlqsvxyz]', re.IGNORECASE)
+triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
+ends_with_consonant = re.compile('[{}]+'.format(
+    ''.join(consonants) + ''.join(vowels)
+))
 
-@lru_cache(maxsize=1024)
-def is_maori(text, drop_ambiguous = False):
+@lru_cache(maxsize = 1024 ** 2)
+def is_maori(text, strict = False):
     '''
     Returns True if the text provided matches Māori orthographical rules.
 
-    `drop_non_maori` - tell `is_maori` whether to ignore common english words that pass the
-    orthography check based on a list of terms
+    `strict` - If True, `is_maori` returns False whenever an orthography rule is broken.
+               If False, `is_maori` will use wordlists to reject common english words with
+               māori language orthography
+
+    There should be two modes of matching:
+        - `Strong` means `is_maori` will return True only if it's certain the text is te reo māori.
+        - `Weak` means `is_maori` will return True only if it can't prove that the text is not te reo māori.
+
     '''
 
     text = text.strip()
 
-    splitter = re.compile(r'[ \n\-]{1,}')
+    splitter = re.compile(r'[\s\n\-]+')
     if splitter.search(text):
         # Split the text and evaluate each piece
         results = []
@@ -43,15 +54,12 @@ def is_maori(text, drop_ambiguous = False):
     raw_text = text
     text = BaseEncoder().encode(text)
 
-    non_maori_chars = set(ch for ch in text.lower() if ch in 'bcdfgjlqsvxyz')
-    if len(non_maori_chars) > 0:
-        logging.debug("Text contains non-maori letters: {}".format(
-            ', '.join(non_maori_chars)))
+    # Match letters found not in the māori alphabet
+    non_maori_letters_result = non_maori_letters.search(text)
+    if non_maori_letters_result:
+        logging.debug("Letter '{}' not in maori character set".format(
+                    non_maori_letters_result.group()))
         return False
-
-    # Remove non alphabet characters
-    text = re.sub(r"[^{}0-9\-\s]".format(''.join(consonants.union(vowels))), "",
-                  text).strip()
 
     if len(text) == 0:
         if re.search('[A-z]', raw_text):
@@ -61,11 +69,11 @@ def is_maori(text, drop_ambiguous = False):
         else:
             return True
 
-    if text in non_maori:
+    if text.capitalize() in non_maori and not text.lower() in ambiguous:
         logging.debug("Text {} is in non_maori word list".format(text))
         return False
 
-    if drop_ambiguous and text in ambiguous:
+    if strict and text.lower() in ambiguous:
         logging.debug("Text {} is in ambiguous word list".format(text))
         return False
 
@@ -76,36 +84,26 @@ def is_maori(text, drop_ambiguous = False):
         else:
             return True
 
-    if _triple_vowels.search(text):
-        logging.debug("Text {} contains triple vowel".format(text))
+    triple_vowels_result = triple_vowels.search(text)
+    if triple_vowels_result:
+        logging.debug("Text {} contains triple vowel '{}'".format(text, triple_vowels_result.group()))
         return False
 
-    for current_ch, next_ch in pairwise(text):
-        if current_ch not in consonants.union(vowels).union(numbers).union(set(" ")):
-            # Character not in maori character set
-            logging.debug("Character '{}' not in maori character set".format(
-                    current_ch))
+    # Match consonants not followed by vowels
+    double_consonants_result = double_consonants.search(text)
+    if double_consonants_result:
+        first, last = double_consonants_result.group()
+        logging.debug("The consonant '{}' is followed by '{}' instead of a vowel in text '{}'".format(
+            first, last, text))
+        return False
+
+    ends_with_consonant_result = ends_with_consonant.search(text)
+    if ends_with_consonant_result:
+        last_letter = ends_with_consonant_result.group()[-1]
+        if last_letter in consonants:
+            # Last character in word is a consonant
+            logging.debug("The last character '{}' is a consonant: {}".format(
+                    last_letter, text))
             return False
-        if current_ch in consonants:
-            # The current character is a consonant, so the next must be a vowel
-            if next_ch in vowels:
-                # The next character is a vowel, so this is ok
-                continue
-            else:
-                # The next character is not a vowel, this is not ok
-                logging.debug("The consonant '{}' is followed by '{}' instead of a vowel: {}"\
-                                  .format(current_ch, next_ch, text))
-                return False
-
-    if text[-1] in consonants:
-        # Last character in word is a consonant
-        logging.debug("The last character '{}' is a consonant: {}".format(
-                next_ch, text))
-        return False
-
-    if text[-1] == "-" and not current_ch in vowels:
-        logging.debug("The next character is {} but the current character {} is not a vowel"\
-                  .format(next_ch, current_ch))
-        return False
 
     return True
