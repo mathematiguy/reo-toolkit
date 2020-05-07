@@ -12,7 +12,9 @@ COPY . /code
 COPY requirements.txt /root/requirements.txt
 RUN pip3 install -r /root/requirements.txt
 
+# Need this for the nltk.tokenizers package
 RUN python3 -m nltk.downloader punkt
 
 RUN Rscript -e 'install.packages("here")'
 RUN Rscript -e 'install.packages("furrr")'
+

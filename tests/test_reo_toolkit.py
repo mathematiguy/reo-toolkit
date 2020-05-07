@@ -4,6 +4,13 @@ from reo_toolkit.wordlists import non_maori
 def test_māori_word():
     assert is_maori('Ko matou ko nga Tino Rangatira o nga iwi o Nu Tireni')
 
+def test_macron():
+    assert is_maori('tohutō')
+
+def test_macron_combining_character():
+    """The unicode code point \u0304 is a combining character that adds a macron to the preceding letter"""
+    assert is_maori('a\u0304'.encode('utf-8').decode())
+
 def test_english_word():
     assert not is_maori('James Cooks')
 
@@ -34,6 +41,9 @@ def test_non_maori_word():
 
 def test_triple_vowel():
     assert not is_maori("teee")
+
+def test_many_vowels():
+    assert is_maori("Papaoiea")
 
 def test_camel_case():
     assert is_maori("KeiTePai")
