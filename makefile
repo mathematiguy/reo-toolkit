@@ -15,8 +15,7 @@ LOG_LEVEL ?= DEBUG
 .PHONY: test jupyter docker-login docker docker-push docker-pull enter enter-root
 
 test:
-	$(RUN) pytest -vv $(if $(MULTICORE), -n $(NUM_CORES)) --durations 10 --log-level $(LOG_LEVEL)
-	$(RUN) bash -c "coverage run --source reo_toolkit -m pytest -v --log-level $(LOG_LEVEL) && coverage report"
+	$(RUN) bash -c "coverage run --source reo_toolkit -m pytest -vv $(if $(MULTICORE), -n $(NUM_CORES)) --durations 10 --log-level $(LOG_LEVEL) && coverage report"
 
 daemon: DOCKER_ARGS= -dit --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name="rdev"
 daemon:
