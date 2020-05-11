@@ -22,7 +22,7 @@ ends_with_consonant = re.compile('[{}]+'.format(
 ))
 
 @lru_cache(maxsize = 1024 ** 2)
-def is_maori(text, strict = False):
+def is_maori(text, strict = False, verbose = False):
     '''
     Returns True if the text provided matches Māori orthographical rules.
 
@@ -30,11 +30,16 @@ def is_maori(text, strict = False):
                If False, `is_maori` will use wordlists to reject common english words with
                māori language orthography
 
+    `verbose` - (default False) If `True` display debugging messages
+
     There should be two modes of matching:
         - `Strong` means `is_maori` will return True only if it's certain the text is te reo māori.
         - `Weak` means `is_maori` will return True only if it can't prove that the text is not te reo māori.
 
     '''
+
+    if verbose:
+        logging.basicConfig(level=logging.DEBUG)
 
     text = text.strip()
 
