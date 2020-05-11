@@ -49,6 +49,9 @@ def test_camel_case():
     assert is_maori("KeiTePai")
     assert not is_maori("MeToo")
 
+def test_apostrophe():
+    assert is_maori("Ko 'Mā whero, mā pango, ka oti te mahi' ētahi o ngā whakatauki rongonui")
+
 def test_okina():
     assert not is_maori("ma'unga")
 
