@@ -14,8 +14,9 @@ consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
 numbers = set(map(str, range(10)))
 
 double_consonants = re.compile('[{}][^{}]'.format(''.join(consonants), ''.join(vowels)))
-non_maori_letters = re.compile("['bcdfgjlqsvxyz]", re.IGNORECASE)
+non_maori_letters = re.compile("[ʻbcdfgjlqsvxyz]", re.IGNORECASE)
 triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
+pacific_island = re.compile("[aeiouAEIOU]'[aeiouAEIOU]")
 ends_with_consonant = re.compile('[{}]+'.format(
     ''.join(consonants) + ''.join(vowels)
 ))
@@ -105,5 +106,11 @@ def is_maori(text, strict = False):
             logging.debug("The last character '{}' is a consonant: {}".format(
                     last_letter, text))
             return False
+    
+    pacific_island_result = pacific_island.search(text)
+    if pacific_island_result:
+        logging.debug('Contains a sequence {} that looks like it is from a Pacific Island language'.format(pacific_island_result.group()))
+        return False
+   
 
     return True
