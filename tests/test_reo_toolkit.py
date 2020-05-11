@@ -52,6 +52,9 @@ def test_camel_case():
 def test_okina():
     assert not is_maori("ma'unga")
 
+def test_all_caps():
+    assert is_maori('WHĀTUA')
+
 def test_te_tiriti_o_waitangi():
     with open('data/te-tiriti-o-waitangi.txt', 'r') as f:
         transcript = f.read()

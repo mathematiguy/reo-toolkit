@@ -18,22 +18,27 @@ class NoEncoder:
 class BaseEncoder:
 
     encoder_dict = {
-        'Ng': 'Ŋ',
-        'Wh': 'Ƒ',
+        'N[Gg]': 'Ŋ',
+        'W[Hh]': 'Ƒ',
         'ng': 'ŋ',
         'wh': 'ƒ'
     }
 
-    decoder_dict = {v: k for k, v in encoder_dict.items()}
+    decoder_dict = {
+        'Ŋ': 'Ng',
+        'Ƒ': 'Wh',
+        'ŋ': 'ng',
+        'ƒ': 'wh'
+    }
 
     def encode(self, text):
         for k, v in self.encoder_dict.items():
-            text = text.replace(k, v)
+            text = re.sub(k, v, text)
         return text
 
     def decode(self, text):
         for k, v in self.decoder_dict.items():
-            text = text.replace(k, v)
+            text = re.sub(k, v, text)
         return text
 
 
