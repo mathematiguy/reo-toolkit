@@ -5,7 +5,7 @@ import logging
 from inflection import camelize
 from functools import lru_cache
 
-from .utils import pairwise, is_camel_case, camel_case_split
+from .utils import is_camel_case, camel_case_split
 from .wordlists import ambiguous, non_maori
 from .encoders import BaseEncoder
 

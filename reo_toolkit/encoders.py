@@ -3,8 +3,6 @@ import nltk
 import jamo
 import logging
 
-from .utils import pairwise
-
 _vowels = list('aeiouāēīōū')
 _consonants = list("hkmnprtwŋƒ")
 
