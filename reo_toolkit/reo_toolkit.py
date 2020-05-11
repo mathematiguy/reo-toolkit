@@ -14,7 +14,7 @@ consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
 numbers = set(map(str, range(10)))
 
 double_consonants = re.compile('[{}][^{}]'.format(''.join(consonants), ''.join(vowels)))
-non_maori_letters = re.compile('[bcdfgjlqsvxyz]', re.IGNORECASE)
+non_maori_letters = re.compile("['bcdfgjlqsvxyz]", re.IGNORECASE)
 triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
 ends_with_consonant = re.compile('[{}]+'.format(
     ''.join(consonants) + ''.join(vowels)
