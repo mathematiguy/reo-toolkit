@@ -4,4 +4,5 @@ jamo
 inflection
 pyahocorasick
 coverage
+wheel
 -e /code
