@@ -14,14 +14,15 @@ consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
 numbers = set(map(str, range(10)))
 
 double_consonants = re.compile('[{}][^{}]'.format(''.join(consonants), ''.join(vowels)))
-non_maori_letters = re.compile("['bcdfgjlqsvxyz]", re.IGNORECASE)
+non_maori_letters = re.compile("[ʻbcdfgjlqsvxyz]", re.IGNORECASE)
 triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
+pacific_island = re.compile("[aeiouAEIOU]'[aeiouAEIOU]")
 ends_with_consonant = re.compile('[{}]+'.format(
     ''.join(consonants) + ''.join(vowels)
 ))
 
 @lru_cache(maxsize = 1024 ** 2)
-def is_maori(text, strict = False):
+def is_maori(text, strict = False, verbose = False):
     '''
     Returns True if the text provided matches Māori orthographical rules.
 
@@ -29,11 +30,16 @@ def is_maori(text, strict = False):
                If False, `is_maori` will use wordlists to reject common english words with
                māori language orthography
 
+    `verbose` - (default False) If `True` display debugging messages
+
     There should be two modes of matching:
         - `Strong` means `is_maori` will return True only if it's certain the text is te reo māori.
         - `Weak` means `is_maori` will return True only if it can't prove that the text is not te reo māori.
 
     '''
+
+    if verbose:
+        logging.basicConfig(level=logging.DEBUG)
 
     text = text.strip()
 
@@ -105,5 +111,11 @@ def is_maori(text, strict = False):
             logging.debug("The last character '{}' is a consonant: {}".format(
                     last_letter, text))
             return False
+    
+    pacific_island_result = pacific_island.search(text)
+    if pacific_island_result:
+        logging.debug('Contains a sequence {} that looks like it is from a Pacific Island language'.format(pacific_island_result.group()))
+        return False
+   
 
     return True
