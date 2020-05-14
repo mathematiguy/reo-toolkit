@@ -23,6 +23,9 @@ def test_ending_consonant():
 def test_non_maori_letter():
     assert not is_maori('z')
 
+def test_number_and_letter():
+    assert not is_maori('26Ki')
+
 def test_ambiguous_word():
     assert not is_maori('a', strict = True)
 
