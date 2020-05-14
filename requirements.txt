@@ -1,5 +1,4 @@
 pytest
-nltk
 jamo
 inflection
 pyahocorasick
