@@ -21,7 +21,7 @@ ends_with_consonant = re.compile('[{}]+'.format(
     ''.join(consonants) + ''.join(vowels)
 ))
 
-@lru_cache(maxsize = 1024 ** 2)
+
 def is_maori(text, strict = False, verbose = False):
     '''
     Returns True if the text provided matches Māori orthographical rules.
@@ -51,11 +51,12 @@ def is_maori(text, strict = False, verbose = False):
             if len(split) == 0:
                 logging.debug("Text {} gives an empty string when split".format(text))
                 return False
-            results.append(is_maori(split))
+            results.append(is_maori(split, strict = strict, verbose = verbose))
         return all(results)
 
     if is_camel_case(text):
-        return all(is_maori(sub.lower()) for sub in camel_case_split(text))
+        return all(is_maori(sub.lower(), strict = strict, verbose = verbose) \
+                   for sub in camel_case_split(text))
 
     raw_text = text
     text = BaseEncoder().encode(text)
@@ -75,13 +76,15 @@ def is_maori(text, strict = False, verbose = False):
         else:
             return True
 
-    if text.capitalize() in non_maori and not text.lower() in ambiguous:
-        logging.debug("Text {} is in non_maori word list".format(text))
-        return False
+    if not strict:
 
-    if strict and text.lower() in ambiguous:
-        logging.debug("Text {} is in ambiguous word list".format(text))
-        return False
+        if text.capitalize() in non_maori:
+            logging.debug("Text {} is in non_maori word list".format(text))
+            return False
+
+        if text.lower() in ambiguous:
+            logging.debug("Text {} is in ambiguous word list".format(text))
+            return False
 
     if len(text) == 1:
         if text in consonants:
@@ -111,11 +114,11 @@ def is_maori(text, strict = False, verbose = False):
             logging.debug("The last character '{}' is a consonant: {}".format(
                     last_letter, text))
             return False
-    
+
     pacific_island_result = pacific_island.search(text)
     if pacific_island_result:
         logging.debug('Contains a sequence {} that looks like it is from a Pacific Island language'.format(pacific_island_result.group()))
         return False
-   
+
 
     return True

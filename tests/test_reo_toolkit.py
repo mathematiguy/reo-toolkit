@@ -23,11 +23,9 @@ def test_ending_consonant():
 def test_non_maori_letter():
     assert not is_maori('z')
 
-def test_number_and_letter():
-    assert not is_maori('26Ki')
-
 def test_ambiguous_word():
-    assert not is_maori('a', strict = True)
+    assert not is_maori('a', strict = False)
+    assert is_maori('a', strict = True)
 
 def test_cleaning():
     # This non-maori word gives a maori word 'i' after the non-maori characters are removed
@@ -67,9 +65,12 @@ def test_all_caps():
 def test_te_tiriti_o_waitangi():
     with open('data/te-tiriti-o-waitangi.txt', 'r') as f:
         transcript = f.read()
-        assert is_maori(transcript)
+        assert is_maori(transcript, strict = True)
 
 def test_he_whakaputanga():
     with open('data/he-whakaputanga.txt', 'r') as f:
         transcript = f.read()
-        assert is_maori(transcript)
+        assert is_maori(transcript, strict = True)
+
+def test_sentence():
+    assert is_maori("inā tatū te tai ka puare tēnei toka ka taea te haere mai i reira ki uta", strict = True)
