@@ -39,7 +39,7 @@ def is_maori(text, strict = False, verbose = False):
     '''
 
     if verbose:
-        logging.basicConfig(level=logging.DEBUG)
+        logging.debug = print
 
     text = text.strip()
 
