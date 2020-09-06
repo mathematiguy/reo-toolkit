@@ -9,7 +9,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     license='Kaitiakitanga License',
     description='A python package for manipulating māori language text',
-    long_description=open('README.md').read(),
+    long_description=open('README.md', 'r', encoding = 'utf-8').read(),
     install_requires=reqs,
     url='https://github.com/TeHikuMedia/reo-toolkit',
     author='Caleb Moses',
