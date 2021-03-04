@@ -117,7 +117,7 @@ class Diphthong:
                         sent_encoded.append(self.encoder_dict[mora])
                         continue
                 except KeyError:
-                    log.error("KeyError: mora {} not in encoder_dict".format(mora))
+                    logging.error("KeyError: mora {} not in encoder_dict".format(mora))
                 sent_encoded.append(mora)
             text_encoded = ''.join(sent_encoded)
             encoded_sents.append(text_encoded)
