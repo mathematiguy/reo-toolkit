@@ -10,7 +10,7 @@ setup(
     license='Kaitiakitanga License',
     description='A python package for manipulating māori language text',
     long_description=open('README.md', 'r', encoding = 'utf-8').read(),
-    install_requires=reqs,
+    install_requires=['jamo', 'inflection', 'pyahocorasick', 'nltk'],
     url='https://github.com/TeHikuMedia/reo-toolkit',
     author='Caleb Moses',
     author_email='caleb@dragonfly.co.nz',
