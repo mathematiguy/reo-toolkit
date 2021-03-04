@@ -1,5 +1,3 @@
-import pandas as pd
-from tqdm import tqdm
 from reo_toolkit.encoders import *
 
 
