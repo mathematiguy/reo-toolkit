@@ -46,7 +46,14 @@ class SingleVowel:
         'ō': 'oo',
         'ū': 'uu',
         'ng': 'ŋ',
-        'wh': 'ƒ'
+        'wh': 'ƒ',
+        'Ā': 'Aa',
+        'Ē': 'Ee',
+        'Ī': 'Ii',
+        'Ō': 'Oo',
+        'Ū': 'Uu',
+        'NG': 'Ŋ',
+        'WH': 'Ƒ'
     }
 
     decoder_dict = {v:k for k,v in encoder_dict.items()}
@@ -78,6 +85,16 @@ class Diphthong:
         'ou': 'ö',
         'ng': 'ŋ',
         'wh': 'ƒ',
+        'AE': 'Æ',
+        'AI': 'Á',
+        'AO': 'Å',
+        'AU': 'Ä',
+        'EI': 'É',
+        'OE': 'Œ',
+        'OI': 'Ó',
+        'OU': 'Ö',
+        'NG': 'Ŋ',
+        'WH': 'Ƒ',
     }
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
