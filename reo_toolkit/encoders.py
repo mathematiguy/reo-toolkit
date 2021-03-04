@@ -4,6 +4,8 @@ import jamo
 import json
 import logging
 from collections import OrderedDict
+from nltk.tokenize import TreebankWordTokenizer
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 from .letters import vowels, consonants, alphabet
 
@@ -198,24 +200,31 @@ class Syllable:
 
     def encode(self, text):
         text = self.preprocess(text, vowel_type = self.vowel_type)
-        encoded_text = []
-        for syllable in self.tokenize(text):
-            if not all(ch in _alphabet for ch in syllable):
-                encoded_text.append(syllable)
+        words = []
+        for word in TreebankWordTokenizer().tokenize(text):
+            from reo_toolkit import is_maori
+            if not is_maori(word):
+                words.append(word)
                 continue
-            if syllable in _vowels:
-                syllable = 'x' + syllable
-            try:
-                consonant, vowel = ''.join([self.encoder_dict[ch] for ch in syllable])
-            except KeyError:
-                logging.error("KeyError: phoneme {} not in encoder_dict".format(syllable))
-                raise KeyError
-            try:
-                encoded = jamo.j2h(consonant, vowel)
-            except jamo.InvalidJamoError:
-                logging.error('InvalidJamoError - Consonant={} Vowel={} Syllable={} Sent={}'.format(consonant, vowel, syllable, sent[:100]))
-            encoded_text.append(encoded)
-        return ''.join(encoded_text)
+            encoded_text = []
+            for syllable in self.tokenize(word):
+                if not all(ch in alphabet for ch in syllable):
+                    encoded_text.append(syllable)
+                    continue
+                if syllable in vowels:
+                    syllable = 'x' + syllable
+                try:
+                    consonant, vowel = ''.join([self.encoder_dict[ch] for ch in syllable])
+                except KeyError:
+                    logging.error("KeyError: phoneme {} not in encoder_dict".format(syllable))
+                    raise KeyError
+                try:
+                    encoded = jamo.j2h(consonant, vowel)
+                except jamo.InvalidJamoError:
+                    logging.error('InvalidJamoError - Consonant={} Vowel={} Syllable={}'.format(consonant, vowel, syllable))
+                encoded_text.append(encoded)
+            words.append(''.join(encoded_text))
+        return TreebankWordDetokenizer().detokenize(words)
 
     def decode(self, encoded_text):
         decoded_sent = ''
@@ -241,10 +250,13 @@ class DoubleVowel:
         return text
 
     def decode(self, encoded):
-        lines = []
-        for line in encoded.split('\n'):
-            lines.append(Base().decode(''.join([self.decoder_dict[ch] for ch in line])))
-        return '\n'.join(lines)
+        decoded = ''
+        for ch in encoded:
+            try:
+                decoded += Base().decode(self.decoder_dict[ch])
+            except KeyError:
+                decoded += ch
+        return decoded
 
 
 class LongSyllable:
@@ -260,7 +272,10 @@ class LongSyllable:
         return text
 
     def decode(self, encoded):
-        lines = []
-        for line in encoded.split('\n'):
-            lines.append(Base().decode(''.join([self.decoder_dict[ch] for ch in line])))
-        return '\n'.join(lines)
+        decoded = ''
+        for ch in encoded:
+            try:
+                decoded += Base().decode(self.decoder_dict[ch])
+            except KeyError:
+                decoded += ch
+        return decoded
