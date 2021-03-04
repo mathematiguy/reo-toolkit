@@ -3,8 +3,8 @@ import nltk
 import jamo
 import logging
 
-_vowels = list('aeiouāēīōū')
-_consonants = list("hkmnprtwŋƒ")
+_vowels = list('aeiouāēīōūAEIOUĀĒĪŌŪ')
+_consonants = list("hkmnprtwŋƒHKMNPRTWŊƑ")
 
 
 class Base:
