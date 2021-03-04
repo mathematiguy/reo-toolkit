@@ -43,11 +43,11 @@ docker: docker-login
 	docker build $(DOCKER_ARGS) --tag $(IMAGE):$(GIT_TAG) .
 	docker tag $(IMAGE):$(GIT_TAG) $(IMAGE):latest
 
-docker-push:
+docker-push: docker-login
 	docker push $(IMAGE):$(GIT_TAG)
 	docker push $(IMAGE):latest
 
-docker-pull:
+docker-pull: docker-login
 	docker pull $(IMAGE):$(GIT_TAG)
 	docker tag $(IMAGE):$(GIT_TAG) $(IMAGE):latest
 
