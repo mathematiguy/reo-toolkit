@@ -1,7 +1,9 @@
 import re
 import nltk
 import jamo
+import json
 import logging
+from collections import OrderedDict
 
 _vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
 _consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
@@ -229,3 +231,40 @@ class Syllable:
         decoded_sent = decoded_sent.replace('x', '').replace('ŋ', 'ng').replace('ƒ', 'wh')
         return decoded_sent
 
+
+class DoubleVowel:
+
+    def __init__(self):
+        self.encoder_dict = json.load(open('reo_toolkit/double_vowel.json', 'r'), object_pairs_hook=OrderedDict)
+        self.decoder_dict = {v:k for k,v in self.encoder_dict.items()}
+
+    def encode(self, text):
+        text = Base().encode(text)
+        for syllable in self.encoder_dict:
+            text = text.replace(syllable, self.encoder_dict[syllable])
+        return text
+
+    def decode(self, encoded):
+        lines = []
+        for line in encoded.split('\n'):
+            lines.append(Base().decode(''.join([self.decoder_dict[ch] for ch in line])))
+        return '\n'.join(lines)
+
+
+class LongSyllable:
+
+    def __init__(self):
+        self.encoder_dict = json.load(open('reo_toolkit/long_syllable.json', 'r'), object_pairs_hook=OrderedDict)
+        self.decoder_dict = {v:k for k,v in self.encoder_dict.items()}
+
+    def encode(self, text):
+        text = Base().encode(text)
+        for syllable in self.encoder_dict:
+            text = text.replace(syllable, self.encoder_dict[syllable])
+        return text
+
+    def decode(self, encoded):
+        lines = []
+        for line in encoded.split('\n'):
+            lines.append(Base().decode(''.join([self.decoder_dict[ch] for ch in line])))
+        return '\n'.join(lines)

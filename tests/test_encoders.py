@@ -28,3 +28,15 @@ def test_syllable_encode():
 
 def test_syllable_decode():
     assert Syllable().decode("케어 테 폐헤아 코에?") == "kei te pēhea koe?"
+
+def test_double_vowel_encode():
+    assert DoubleVowel().encode("whiti mai te ra") == "ƨƝƥƝ ƟƯ ƥƛ Ƥƚ"
+
+def test_double_vowel_decode():
+    assert DoubleVowel().decode("ƨƝƥƝ ƟƯ ƥƛ Ƥƚ") == "whiti mai te ra"
+
+def test_long_syllable_encode():
+    assert LongSyllable().encode("whiti mai te ra") == "ʁʄ Ȯ ʎ ʙ"
+
+def test_long_syllable_decode():
+    assert LongSyllable().decode("ʁʄ Ȯ ʎ ʙ") == "whiti mai te ra"
