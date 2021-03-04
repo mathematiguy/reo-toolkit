@@ -35,9 +35,9 @@ jupyter:
 			python3 -c \
 			"from IPython.lib import passwd; print(passwd('$(JUPYTER_PASSWORD)'))")
 
-PROFILE ?= default
+AWS_PROFILE ?= default
 docker-login:
-	$(if $(HAS_AWS), eval $$(aws ecr get-login --no-include-email --profile $(PROFILE) --region ap-southeast-2 | sed 's|https://||'))
+	$(if $(HAS_AWS), eval $$(aws ecr get-login --no-include-email --profile $(AWS_PROFILE) --region ap-southeast-2 | sed 's|https://||'))
 
 docker: docker-login
 	docker build $(DOCKER_ARGS) --tag $(IMAGE):$(GIT_TAG) .
