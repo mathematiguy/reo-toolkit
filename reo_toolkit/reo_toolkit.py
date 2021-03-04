@@ -7,7 +7,7 @@ from functools import lru_cache
 
 from .utils import is_camel_case, camel_case_split
 from .wordlists import ambiguous, non_maori
-from .encoders import BaseEncoder
+from .encoders import Base
 
 vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
 consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
@@ -59,7 +59,7 @@ def is_maori(text, strict = False, verbose = False):
                    for sub in camel_case_split(text))
 
     raw_text = text
-    text = BaseEncoder().encode(text)
+    text = Base().encode(text)
 
     # Match letters found not in the māori alphabet
     non_maori_letters_result = non_maori_letters.search(text)

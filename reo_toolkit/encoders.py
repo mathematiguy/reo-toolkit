@@ -7,15 +7,7 @@ _vowels = list('aeiouāēīōū')
 _consonants = list("hkmnprtwŋƒ")
 
 
-class NoEncoder:
-    def encode(self, text):
-        return text
-
-    def decode(self, text):
-        return text
-
-
-class BaseEncoder:
+class Base:
 
     encoder_dict = {
         'N[Gg]': 'Ŋ',
@@ -42,7 +34,7 @@ class BaseEncoder:
         return text
 
 
-class ShortmoraEncoder:
+class Shortmora:
 
     encoder_dict = {
         'Ā': 'Aa',
@@ -74,7 +66,7 @@ class ShortmoraEncoder:
         return text
 
 
-class MoraEncoder:
+class Mora:
 
     encoder_dict = {
         'ae': 'Æ',
@@ -116,7 +108,7 @@ class MoraEncoder:
         return encoded_text
 
 
-class SyllableEncoder:
+class Syllable:
 
     encoder_dict = {
         'a': 'ᅡ',
@@ -145,7 +137,7 @@ class SyllableEncoder:
     decoder_dict = {v: k for k, v in encoder_dict.items()}
 
     def preprocess(self, text):
-        return BaseEncoder().encode(text).lower()
+        return Base().encode(text).lower()
 
     def tokenize(self, text):
         for i, ch in enumerate(text):
