@@ -1,9 +1,16 @@
-from tqdm import tqdm
 import pandas as pd
+from tqdm import tqdm
 from reo_toolkit.encoders import *
 
+
 def test_bilingual():
-    assert Base().encode("Ko Murray tōku ingoa") == "Ko Murray tōku iŋoa"
+    bilingual_sent = "ko murray tōku ingoa"
+    assert Base().decode(Base().encode(bilingual_sent)) == bilingual_sent
+    assert Diphthong().decode(Diphthong().encode(bilingual_sent)) == bilingual_sent
+    assert SingleVowel().decode(SingleVowel().encode(bilingual_sent)) == bilingual_sent
+    assert DoubleVowel().decode(DoubleVowel().encode(bilingual_sent)) == bilingual_sent
+    assert Syllable().decode(Syllable().encode(bilingual_sent)) == bilingual_sent
+    assert LongSyllable().decode(LongSyllable().encode(bilingual_sent)) == bilingual_sent
 
 def test_base_encode():
     assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
