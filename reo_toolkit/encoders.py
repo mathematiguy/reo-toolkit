@@ -3,8 +3,9 @@ import nltk
 import jamo
 import logging
 
-_vowels = list('aeiouāēīōūAEIOUĀĒĪŌŪ')
-_consonants = list("hkmnprtwŋƒHKMNPRTWŊƑ")
+_vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
+_consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
+_numbers = set(map(str, range(10)))
 
 
 class Base:
@@ -61,6 +62,71 @@ class SingleVowel:
                 text = text.replace(k, v)
 
         return text
+
+
+class Diphthong:
+
+    encoder_dict = {
+        'ae': 'æ',
+        'ai': 'á',
+        'ao': 'å',
+        'au': 'ä',
+        'ei': 'é',
+        'oe': 'œ',
+        'oi': 'ó',
+        'ou': 'ö',
+        'ng': 'ŋ',
+        'wh': 'ƒ',
+    }
+
+    decoder_dict = {v: k for k, v in encoder_dict.items()}
+
+    def tokenize(self, text, keep_spaces = False):
+        while len(text) > 0:
+            if keep_spaces and text[0] in [" ", "-"]:
+                yield text[0]
+                text = text[1:]
+            if text[0] in _consonants:
+                yield text[0]
+                text = text[1:]
+            elif text[0] in _vowels:
+                if len(text) > 1 and text[1] in _vowels:
+                    if text[:2] in self.encoder_dict.keys():
+                        yield text[:2]
+                        text = text[2:]
+                    else:
+                        yield text[0]
+                        text = text[1:]
+                else:
+                    yield text[0]
+                    text = text[1:]
+            else:
+                text = text[1:]
+                continue
+
+    def encode(self, text):
+        encoded_sents = []
+        for sent in text.split("\n"):
+            sent_encoded = []
+            for mora in self.tokenize(sent, keep_spaces = True):
+                if mora in [" ", "-"]:
+                    sent_encoded.append(mora)
+                    continue
+                try:
+                    if len(mora) > 1 or mora == "f":
+                        sent_encoded.append(self.encoder_dict[mora])
+                        continue
+                except KeyError:
+                    log.error("KeyError: mora {} not in encoder_dict".format(mora))
+                sent_encoded.append(mora)
+            text_encoded = ''.join(sent_encoded)
+            encoded_sents.append(text_encoded)
+        return '\n'.join(encoded_sents)
+
+    def decode(self, encoded_text):
+        for diphthong, mora in self.encoder_dict.items():
+             encoded_text = encoded_text.replace(mora, diphthong)
+        return encoded_text
 
 
 class Mora:
@@ -138,7 +204,7 @@ class Syllable:
 
     def tokenize(self, text):
         for i, ch in enumerate(text):
-            if ch not in _vowels + _consonants:
+            if ch not in _vowels.union(_consonants):
                 yield ch
             elif ch in _vowels and text[i - 1] not in _consonants:
                 # ch is a vowel and the preceding char is not a consonant
@@ -155,7 +221,7 @@ class Syllable:
                 text_encoded.append(syllable)
                 continue
             if len(syllable) == 1:
-                if syllable in _vowels + _consonants:
+                if syllable in _vowels.union(_consonants):
                     syllable = 'x' + syllable
                 else:
                     text_encoded.append(syllable)

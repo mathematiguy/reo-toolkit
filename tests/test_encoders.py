@@ -14,6 +14,12 @@ def test_single_vowel_encode():
 def test_single_vowel_decode():
     assert SingleVowel().decode("Teenaa koe") == "Tēnā koe"
 
+def test_diphthong_encode():
+    assert Diphthong().encode("Kua tae mai") == "Kua tæ má"
+
+def test_diphthong_decode():
+    assert Diphthong().decode("Kua tæ má") == "Kua tae mai"
+
 def test_mora_encode():
     assert Mora().encode("Kua tae mai") == "Kua tæ má"
 
