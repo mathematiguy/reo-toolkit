@@ -157,61 +157,57 @@ class Syllable:
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
 
-    def preprocess(self, text):
-        return Base().encode(text).lower()
+    def __init__(self, vowel_type = 'long'):
+        self.vowel_type = vowel_type
 
-    def tokenize(self, text):
+    def preprocess(self, text, vowel_type):
+        # Syllable encoder only supports lowercase text
+        text = text.lower()
+        if vowel_type == 'short':
+            text = SingleVowel().encode(text)
+        return Base().encode(text)
+
+    def tokenize(self, text, keep_spaces = False):
         for i, ch in enumerate(text):
             if ch not in _vowels.union(_consonants):
                 yield ch
-            elif ch in _vowels and text[i - 1] not in _consonants:
+            elif ch == '-':
+                yield ch
+            elif ch in _vowels and text[i-1] not in _consonants:
                 # ch is a vowel and the preceding char is not a consonant
                 yield ch
             elif ch in _consonants:
                 # ch is a consonant
-                yield text[i:i + 2]
+                yield text[i:i+2]
 
     def encode(self, text):
-        text = self.preprocess(text)
-        text_encoded = []
-        for syllable in self.tokenize(text):
-            if syllable in [" ", "-"]:
-                text_encoded.append(syllable)
+        text = self.preprocess(text, vowel_type = self.vowel_type)
+        encoded_text = []
+        for syllable in self.tokenize(text, keep_spaces = True):
+            if not all(ch in _vowels.union(_consonants) for ch in syllable):
+                encoded_text.append(syllable)
                 continue
-            if len(syllable) == 1:
-                if syllable in _vowels.union(_consonants):
-                    syllable = 'x' + syllable
-                else:
-                    text_encoded.append(syllable)
-                    continue
+            if syllable in _vowels:
+                syllable = 'x' + syllable
             try:
-                consonant, vowel = ''.join(
-                    [self.encoder_dict[ch] for ch in syllable])
+                consonant, vowel = ''.join([self.encoder_dict[ch] for ch in syllable])
             except KeyError:
-                logging.error(
-                    "KeyError: phoneme {} in sent {} not in encoder_dict".
-                    format(syllable, text))
+                logging.error("KeyError: phoneme {} not in encoder_dict".format(syllable))
                 raise KeyError
             try:
                 encoded = jamo.j2h(consonant, vowel)
             except jamo.InvalidJamoError:
-                logging.error(
-                    'InvalidJamoError - Consonant={} Vowel={} Syllable={} Sent={}'
-                    .format(consonant, vowel, syllable, text[:100]))
-            text_encoded.append(encoded)
-        return ''.join(text_encoded)
+                logging.error('InvalidJamoError - Consonant={} Vowel={} Syllable={} Sent={}'.format(consonant, vowel, syllable, sent[:100]))
+            encoded_text.append(encoded)
+        return ''.join(encoded_text)
 
-    def decode(self, text):
+    def decode(self, encoded_text):
         decoded_sent = ''
-        for ch in text:
+        for ch in encoded_text:
             if jamo.is_hangul_char(ch):
-                decoded_sent += ''.join(
-                    [self.decoder_dict[ch] for ch in jamo.hangul_to_jamo(ch)])
+                decoded_sent += ''.join([self.decoder_dict[ch] for ch in jamo.hangul_to_jamo(ch)])
             else:
                 decoded_sent += ch
-
-        decoded_sent = decoded_sent.replace('x', '')
-        decoded_sent = decoded_sent.replace('ŋ', 'ng')
-        decoded_sent = decoded_sent.replace('ƒ', 'wh')
-
+        decoded_sent = decoded_sent.replace('x', '').replace('ŋ', 'ng').replace('ƒ', 'wh')
         return decoded_sent
+
