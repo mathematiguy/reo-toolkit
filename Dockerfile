@@ -9,9 +9,6 @@ RUN sed -i 's/archive/nz.archive/' /etc/apt/sources.list
 RUN apt update
 RUN apt install -y python3-dev python3-pip
 
-# Install jupyterlab
-RUN pip3 install jupyter jupyterlab ipython pandas numpy matplotlib jsonlines pytest-xdist pytest-benchmark
-
 COPY . /code
 COPY requirements.txt /root/requirements.txt
 RUN pip3 install -r /root/requirements.txt
