@@ -2,6 +2,9 @@ from tqdm import tqdm
 import pandas as pd
 from reo_toolkit.encoders import *
 
+def test_bilingual():
+    assert Base().encode("Ko Murray tōku ingoa") == "Ko Murray tōku iŋoa"
+
 def test_base_encode():
     assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
 
