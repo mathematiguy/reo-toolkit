@@ -5,10 +5,7 @@ import json
 import logging
 from collections import OrderedDict
 
-_vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
-_consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
-_alphabet = _vowels.union(_consonants)
-_numbers = set(map(str, range(10)))
+from .letters import vowels, consonants, alphabet
 
 
 class Base:
@@ -102,14 +99,14 @@ class Diphthong:
 
     def tokenize(self, text):
         while len(text) > 0:
-            if not text[0] in _alphabet:
+            if not text[0] in alphabet:
                 yield text[0]
                 text = text[1:]
-            elif text[0] in _consonants:
+            elif text[0] in consonants:
                 yield text[0]
                 text = text[1:]
-            elif text[0] in _vowels:
-                if len(text) > 1 and text[1] in _vowels:
+            elif text[0] in vowels:
+                if len(text) > 1 and text[1] in vowels:
                     if text[:2] in self.encoder_dict.keys():
                         yield text[:2]
                         text = text[2:]
@@ -188,14 +185,14 @@ class Syllable:
 
     def tokenize(self, text):
         for i, ch in enumerate(text):
-            if ch not in _alphabet:
+            if ch not in alphabet:
                 yield ch
             elif ch == '-':
                 yield ch
-            elif ch in _vowels and text[i-1] not in _consonants:
+            elif ch in vowels and text[i-1] not in consonants:
                 # ch is a vowel and the preceding char is not a consonant
                 yield ch
-            elif ch in _consonants:
+            elif ch in consonants:
                 # ch is a consonant
                 yield text[i:i+2]
 

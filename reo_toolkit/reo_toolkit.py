@@ -8,10 +8,7 @@ from functools import lru_cache
 from .utils import is_camel_case, camel_case_split
 from .wordlists import ambiguous, non_maori
 from .encoders import Base
-
-vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
-consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
-numbers = set(map(str, range(10)))
+from .letters import vowels, consonants, numbers
 
 double_consonants = re.compile('[{}][^{}]'.format(''.join(consonants), ''.join(vowels)))
 non_maori_letters = re.compile("[ʻbcdfgjlqsvxyz]", re.IGNORECASE)
