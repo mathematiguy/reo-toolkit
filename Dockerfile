@@ -1,5 +1,9 @@
 FROM ubuntu:20.04
 
+ENV DEBIAN_FRONTEND noninteractive
+
+# Use New Zealand mirrors
+RUN sed -i 's/archive/nz.archive/' /etc/apt/sources.list
 
 # Install python + other things
 RUN apt update
