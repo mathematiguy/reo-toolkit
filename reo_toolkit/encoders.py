@@ -5,6 +5,7 @@ import logging
 
 _vowels = set(r'AEIOUĀĒĪŌŪaeiouāēīōū')
 _consonants = set("HKMNPRTWŊƑhkmnprtwŋƒ")
+_alphabet = _vowels.union(_consonants)
 _numbers = set(map(str, range(10)))
 
 
@@ -81,12 +82,12 @@ class Diphthong:
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
 
-    def tokenize(self, text, keep_spaces = False):
+    def tokenize(self, text):
         while len(text) > 0:
-            if keep_spaces and text[0] in [" ", "-"]:
+            if not text[0] in _alphabet:
                 yield text[0]
                 text = text[1:]
-            if text[0] in _consonants:
+            elif text[0] in _consonants:
                 yield text[0]
                 text = text[1:]
             elif text[0] in _vowels:
@@ -108,7 +109,7 @@ class Diphthong:
         encoded_sents = []
         for sent in text.split("\n"):
             sent_encoded = []
-            for mora in self.tokenize(sent, keep_spaces = True):
+            for mora in self.tokenize(sent):
                 if mora in [" ", "-"]:
                     sent_encoded.append(mora)
                     continue
@@ -167,9 +168,9 @@ class Syllable:
             text = SingleVowel().encode(text)
         return Base().encode(text)
 
-    def tokenize(self, text, keep_spaces = False):
+    def tokenize(self, text):
         for i, ch in enumerate(text):
-            if ch not in _vowels.union(_consonants):
+            if ch not in _alphabet:
                 yield ch
             elif ch == '-':
                 yield ch
@@ -183,8 +184,8 @@ class Syllable:
     def encode(self, text):
         text = self.preprocess(text, vowel_type = self.vowel_type)
         encoded_text = []
-        for syllable in self.tokenize(text, keep_spaces = True):
-            if not all(ch in _vowels.union(_consonants) for ch in syllable):
+        for syllable in self.tokenize(text):
+            if not all(ch in _alphabet for ch in syllable):
                 encoded_text.append(syllable)
                 continue
             if syllable in _vowels:
