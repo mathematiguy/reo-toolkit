@@ -19,7 +19,7 @@ ends_with_consonant = re.compile('[{}]+'.format(
 ))
 
 
-def is_maori(text, strict = False, verbose = False):
+def is_maori(text, strict = True, verbose = False):
     '''
     Returns True if the text provided matches Māori orthographical rules.
 

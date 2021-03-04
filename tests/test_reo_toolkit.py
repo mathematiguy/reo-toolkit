@@ -38,7 +38,7 @@ def test_long_hyphenated_word():
     assert is_maori('Taumatawhakatangi-hangakoauauotamatea-turipukakapikimaunga-horonukupokaiwhenua-kitanatahu')
 
 def test_non_maori_word():
-    assert not is_maori('tongue')
+    assert not is_maori('tongue', strict = False)
 
 def test_triple_vowel():
     assert not is_maori("teee")
@@ -48,7 +48,7 @@ def test_many_vowels():
 
 def test_camel_case():
     assert is_maori("KeiTePai")
-    assert not is_maori("MeToo")
+    assert not is_maori("MeToo", strict = False)
 
 def test_apostrophe():
     assert is_maori("Ko 'Mā whero, mā pango, ka oti te mahi' ētahi o ngā whakatauki rongonui")
