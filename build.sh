@@ -1,7 +1,8 @@
 #! /bin/bash
 set -ex
 
-# Install package
+# Install packages
+pip3 install coverage pytest
 pip3 install -e .
 
 # Install nltk tokenizers
