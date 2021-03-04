@@ -8,11 +8,11 @@ def test_base_encode():
 def test_base_decode():
     assert Base().decode("Ƒiti mai te ra") == "Whiti mai te ra"
 
-def test_shortmora_encode():
-    assert Shortmora().encode("Tēnā koe") == "Teenaa koe"
+def test_single_vowel_encode():
+    assert SingleVowel().encode("Tēnā koe") == "Teenaa koe"
 
-def test_shortmora_decode():
-    assert Shortmora().decode("Teenaa koe") == "Tēnā koe"
+def test_single_vowel_decode():
+    assert SingleVowel().decode("Teenaa koe") == "Tēnā koe"
 
 def test_mora_encode():
     assert Mora().encode("Kua tae mai") == "Kua tæ má"

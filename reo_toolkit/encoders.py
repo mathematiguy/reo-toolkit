@@ -34,16 +34,10 @@ class Base:
         return text
 
 
-class Shortmora:
+
+class SingleVowel:
 
     encoder_dict = {
-        'Ā': 'Aa',
-        'Ē': 'Ee',
-        'Ī': 'Ii',
-        'O': 'Oo',
-        'U': 'Uu',
-        'Ng': 'Ŋ',
-        'Wh': 'Ƒ',
         'ā': 'aa',
         'ē': 'ee',
         'ī': 'ii',
@@ -53,7 +47,7 @@ class Shortmora:
         'wh': 'ƒ'
     }
 
-    decoder_dict = {v: k for k, v in encoder_dict.items()}
+    decoder_dict = {v:k for k,v in encoder_dict.items()}
 
     def encode(self, text):
         for k, v in self.encoder_dict.items():
@@ -61,8 +55,11 @@ class Shortmora:
         return text
 
     def decode(self, text):
+
         for k, v in self.decoder_dict.items():
-            text = text.replace(k, v)
+            if k in text:
+                text = text.replace(k, v)
+
         return text
 
 
