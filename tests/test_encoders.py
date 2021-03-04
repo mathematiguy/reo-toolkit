@@ -20,12 +20,6 @@ def test_diphthong_encode():
 def test_diphthong_decode():
     assert Diphthong().decode("Kua tæ má") == "Kua tae mai"
 
-def test_mora_encode():
-    assert Mora().encode("Kua tae mai") == "Kua tæ má"
-
-def test_mora_decode():
-    assert Mora().decode("Kua tæ má") == "Kua tae mai"
-
 def test_syllable_encode():
     assert Syllable().encode("Kei te pēhea koe?") == "케어 테 폐헤아 코에?"
 

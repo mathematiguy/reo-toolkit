@@ -129,48 +129,6 @@ class Diphthong:
         return encoded_text
 
 
-class Mora:
-
-    encoder_dict = {
-        'ae': 'Æ',
-        'ai': 'Á',
-        'ao': 'Å',
-        'au': 'Ä',
-        'ei': 'É',
-        'eu': 'Ë',
-        'iu': 'Ï',
-        'oe': 'Œ',
-        'oi': 'Ó',
-        'ou': 'Ö',
-        'ng': 'Ŋ',
-        'wh': 'Ƒ',
-        'ae': 'æ',
-        'ai': 'á',
-        'ao': 'å',
-        'au': 'ä',
-        'ei': 'é',
-        'eu': 'ë',
-        'iu': 'ï',
-        'oe': 'œ',
-        'oi': 'ó',
-        'ou': 'ö',
-        'ng': 'ŋ',
-        'wh': 'ƒ',
-    }
-
-    decoder_dict = {v: k for k, v in encoder_dict.items()}
-
-    def encode(self, text):
-        for k, v in self.encoder_dict.items():
-            text = text.replace(k, v)
-        return text
-
-    def decode(self, encoded_text):
-        for diphthong, mora in self.encoder_dict.items():
-            encoded_text = encoded_text.replace(mora, diphthong)
-        return encoded_text
-
-
 class Syllable:
 
     encoder_dict = {
