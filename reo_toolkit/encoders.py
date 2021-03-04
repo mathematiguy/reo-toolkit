@@ -38,7 +38,6 @@ class Base:
         return text
 
 
-
 class SingleVowel:
 
     encoder_dict = {
