@@ -1,4 +1,5 @@
-FROM dragonflyscience/dragonverse-18.04:latest
+FROM ubuntu:20.04
+
 
 # Install python + other things
 RUN apt update
