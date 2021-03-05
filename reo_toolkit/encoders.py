@@ -1,4 +1,5 @@
 import re
+import sys
 import nltk
 import jamo
 import json
@@ -8,6 +9,17 @@ from nltk.tokenize import TreebankWordTokenizer
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 from .letters import vowels, consonants, alphabet
+
+def get_encoder(name):
+    available_encoders = [
+        'base', 'single_vowel', 'diphthong', 'syllable', 'double_vowel', 'long_syllable'
+    ]
+    assert name in available_encoders,\
+        "Invalid encoder! Choose one of '{}', '{}', '{}', '{}', '{}' or '{}'"\
+        .format(*available_encoders)
+
+    encoder = ''.join(map(str.title, name.split('_')))
+    return getattr(sys.modules[__name__], encoder)
 
 
 class Base:
