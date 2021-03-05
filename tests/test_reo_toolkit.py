@@ -62,6 +62,9 @@ def test_okina():
 def test_all_caps():
     assert is_maori('WHĀTUA')
 
+def test_alphanum():
+    assert not is_maori('i18n')
+
 def test_te_tiriti_o_waitangi():
     with open('data/te-tiriti-o-waitangi.txt', 'r') as f:
         transcript = f.read()
