@@ -222,6 +222,12 @@ class Syllable:
                 # ch is a consonant
                 yield text[i:i+2]
 
+    def detokenize(self, words):
+        detokenized = ' '.join(words)
+        for punct in [',', '\\.', '\\?', '!', ':',';']:
+            detokenized = re.sub('[ ]+'+punct, punct.replace("\\", ""), detokenized)
+        return detokenized
+
     def encode(self, text):
         text = self.preprocess(text, vowel_type = self.vowel_type)
         words = []
@@ -248,7 +254,9 @@ class Syllable:
                     logging.error('InvalidJamoError - Consonant={} Vowel={} Syllable={}'.format(consonant, vowel, syllable))
                 encoded_text.append(encoded)
             words.append(''.join(encoded_text))
-        return TreebankWordDetokenizer().detokenize(words)
+        encoded = self.detokenize(words)
+        logging.debug(f"encoded: {encoded}")
+        return encoded
 
     def decode(self, encoded_text):
         decoded_sent = ''
