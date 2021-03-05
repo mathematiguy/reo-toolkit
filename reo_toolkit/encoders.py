@@ -283,6 +283,9 @@ class DoubleVowel:
     def decode(self, encoded):
         decoded = ''
         for ch in encoded:
+            if ch == ' ':
+                decoded += ch
+                continue
             try:
                 decoded += Base().decode(self.decoder_dict[ch])
             except KeyError:
@@ -305,6 +308,9 @@ class LongSyllable:
     def decode(self, encoded):
         decoded = ''
         for ch in encoded:
+            if ch == ' ':
+                decoded += ch
+                continue
             try:
                 decoded += Base().decode(self.decoder_dict[ch])
             except KeyError:
