@@ -1,1 +1,1 @@
-docker: python:3-alpine3.12
+docker: python:3
