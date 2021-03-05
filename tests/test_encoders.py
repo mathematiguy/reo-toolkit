@@ -1,13 +1,28 @@
 from reo_toolkit.encoders import *
 
+bilingual_sent = "ko murray tōku ingoa"
 
-def test_bilingual():
-    bilingual_sent = "ko murray tōku ingoa"
+def test_encoder():
+    base = get_encoder('base')
+    assert base().encode('kupu') == 'kupu'
+
+def test_bilingual_base():
     assert Base().decode(Base().encode(bilingual_sent)) == bilingual_sent
+
+def test_bilingual_diphthong():
     assert Diphthong().decode(Diphthong().encode(bilingual_sent)) == bilingual_sent
+
+def test_bilingual_singlevowel():
     assert SingleVowel().decode(SingleVowel().encode(bilingual_sent)) == bilingual_sent
+
+def test_bilingual_doublevowel():
     assert DoubleVowel().decode(DoubleVowel().encode(bilingual_sent)) == bilingual_sent
+
+def test_bilingual_syllable():
+    bilingual_sent = 'ko te rata te next one'
     assert Syllable().decode(Syllable().encode(bilingual_sent)) == bilingual_sent
+
+def test_bilingual_longsyllable():
     assert LongSyllable().decode(LongSyllable().encode(bilingual_sent)) == bilingual_sent
 
 def test_base_encode():
