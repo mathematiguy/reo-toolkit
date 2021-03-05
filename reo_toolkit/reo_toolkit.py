@@ -8,12 +8,13 @@ from functools import lru_cache
 from .utils import is_camel_case, camel_case_split
 from .wordlists import ambiguous, non_maori
 from .encoders import Base
-from .letters import vowels, consonants, numbers
+from .letters import vowels, consonants, alphabet, numbers
 
 double_consonants = re.compile('[{}][^{}]'.format(''.join(consonants), ''.join(vowels)))
 non_maori_letters = re.compile("[ʻbcdfgjlqsvxyz]", re.IGNORECASE)
 triple_vowels = re.compile('|'.join([r"{}{{3}}".format(ch) for ch in vowels]))
 pacific_island = re.compile("[aeiouAEIOU]'[aeiouAEIOU]")
+alphanum = re.compile("[{}]+[0-9]+".format(''.join(alphabet)))
 ends_with_consonant = re.compile('[{}]+'.format(
     ''.join(consonants) + ''.join(vowels)
 ))
@@ -117,5 +118,9 @@ def is_maori(text, strict = True, verbose = False):
         logging.debug('Contains a sequence {} that looks like it is from a Pacific Island language'.format(pacific_island_result.group()))
         return False
 
+    alphanum_result = alphanum.search(text)
+    if alphanum_result:
+        logging.debug('Contains numbers and letters together: {}'.format(alphanum_result.group()))
+        return False
 
     return True
