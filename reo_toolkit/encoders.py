@@ -46,7 +46,19 @@ class Base:
     def decode(self, text):
         for k, v in self.decoder_dict.items():
             text = re.sub(k, v, text)
-        return text
+        words = []
+        logging.debug(f"Tokenized: {TreebankWordTokenizer().tokenize(text)}")
+        for word in TreebankWordTokenizer().tokenize(text):
+            if 'Ng' in word:
+                temp = word.replace("Ng", "")
+                if temp.upper() == temp:
+                    word = word.replace("Ng", "NG")
+            if 'Wh' in word:
+                temp = word.replace("Wh", "")
+                if temp.upper() == temp:
+                    word = word.replace("Wh", "WH")
+            words.append(word)
+        return TreebankWordDetokenizer().detokenize(words)
 
 
 class SingleVowel:
