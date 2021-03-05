@@ -25,6 +25,9 @@ def test_bilingual_syllable():
 def test_bilingual_longsyllable():
     assert LongSyllable().decode(LongSyllable().encode(bilingual_sent)) == bilingual_sent
 
+def test_all_caps():
+    assert Base().decode(Base().encode('NGĀ MŌTEATEA')) == "NGĀ MŌTEATEA"
+
 def test_base_encode():
     assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
 
