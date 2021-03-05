@@ -4,6 +4,7 @@ import nltk
 import jamo
 import json
 import logging
+import pkgutil
 from collections import OrderedDict
 from nltk.tokenize import TreebankWordTokenizer
 from nltk.tokenize.treebank import TreebankWordDetokenizer
@@ -280,7 +281,8 @@ class Syllable:
 class DoubleVowel:
 
     def __init__(self):
-        self.encoder_dict = json.load(open('reo_toolkit/double_vowel.json', 'r'), object_pairs_hook=OrderedDict)
+        self.encoder_dict = json.loads(
+            pkgutil.get_data(__name__, 'double_vowel.json'), object_pairs_hook=OrderedDict)
         self.decoder_dict = {v:k for k,v in self.encoder_dict.items()}
 
     def encode(self, text):
@@ -305,7 +307,7 @@ class DoubleVowel:
 class LongSyllable:
 
     def __init__(self):
-        self.encoder_dict = json.load(open('reo_toolkit/long_syllable.json', 'r'), object_pairs_hook=OrderedDict)
+        self.encoder_dict = json.loads(pkgutil.get_data(__name__, 'long_syllable.json'), object_pairs_hook=OrderedDict)
         self.decoder_dict = {v:k for k,v in self.encoder_dict.items()}
 
     def encode(self, text):
