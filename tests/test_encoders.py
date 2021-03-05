@@ -58,6 +58,10 @@ def test_syllable_encode():
 def test_syllable_decode():
     assert Syllable().decode("케어 테 폐헤아 코에?") == "kei te pēhea koe?"
 
+def test_syllable_alphanum():
+    sent = 'i18n me l10n i roto i te reo ipurangi'
+    assert Syllable().decode(Syllable().encode(sent)) == sent
+
 def test_double_vowel_encode():
     assert DoubleVowel().encode("whiti mai te ra") == "ƨƝƥƝ ƟƯ ƥƛ Ƥƚ"
 
