@@ -194,7 +194,7 @@ class Syllable:
         'w': 'ᄇ',
         'ŋ': 'ᄉ',
         'ƒ': 'ᄌ',
-        'x': 'ᄋ'
+        'ᄋ': 'ᄋ'
     }
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
@@ -242,7 +242,7 @@ class Syllable:
                     encoded_text.append(syllable)
                     continue
                 if syllable in vowels:
-                    syllable = 'x' + syllable
+                    syllable = 'ᄋ' + syllable
                 try:
                     consonant, vowel = ''.join([self.encoder_dict[ch] for ch in syllable])
                 except KeyError:
@@ -265,8 +265,7 @@ class Syllable:
                 decoded_sent += ''.join([self.decoder_dict[ch] for ch in jamo.hangul_to_jamo(ch)])
             else:
                 decoded_sent += ch
-        decoded_sent = decoded_sent.replace('x', '').replace('ŋ', 'ng').replace('ƒ', 'wh')
-        return decoded_sent
+        return decoded_sent.replace('ᄋ', '')
 
 
 class DoubleVowel:
