@@ -4,7 +4,7 @@ bilingual_sent = "ko murray tōku ingoa"
 
 def test_encoder():
     base = get_encoder('base')
-    assert base().encode('kupu') == 'kupu'
+    assert base.encode('kupu') == 'kupu'
 
 def test_bilingual_base():
     assert Base().decode(Base().encode(bilingual_sent)) == bilingual_sent

@@ -19,7 +19,7 @@ def get_encoder(name):
         .format(*available_encoders)
 
     encoder = ''.join(map(str.title, name.split('_')))
-    return getattr(sys.modules[__name__], encoder)
+    return getattr(sys.modules[__name__], encoder)()
 
 
 class Base:
