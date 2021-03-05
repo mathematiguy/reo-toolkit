@@ -38,6 +38,15 @@ class Base:
         'ƒ': 'wh'
     }
 
+    def detokenize(self, words):
+        detokenized = TreebankWordDetokenizer().detokenize(words)
+        for punct in [',', '\\.', '\\?', '!', ':', ';']:
+            detokenized = re.sub('[ ]+'+punct, punct.replace("\\", ""), detokenized)
+        detokenized = re.sub('‘ ', '‘', detokenized)
+        detokenized = re.sub(' ’', '’', detokenized)
+        return detokenized
+
+
     def encode(self, text):
         for k, v in self.encoder_dict.items():
             text = re.sub(k, v, text)
@@ -47,7 +56,6 @@ class Base:
         for k, v in self.decoder_dict.items():
             text = re.sub(k, v, text)
         words = []
-        logging.debug(f"Tokenized: {TreebankWordTokenizer().tokenize(text)}")
         for word in TreebankWordTokenizer().tokenize(text):
             if 'Ng' in word:
                 temp = word.replace("Ng", "")
@@ -58,7 +66,7 @@ class Base:
                 if temp.upper() == temp:
                     word = word.replace("Wh", "WH")
             words.append(word)
-        return TreebankWordDetokenizer().detokenize(words)
+        return self.detokenize(words)
 
 
 class SingleVowel:
@@ -224,8 +232,10 @@ class Syllable:
 
     def detokenize(self, words):
         detokenized = ' '.join(words)
-        for punct in [',', '\\.', '\\?', '!', ':',';']:
+        for punct in [',', '\\.', '\\?', '!', ':', ';']:
             detokenized = re.sub('[ ]+'+punct, punct.replace("\\", ""), detokenized)
+        detokenized = re.sub('‘ ', '‘', detokenized)
+        detokenized = re.sub(' ’', '’', detokenized)
         return detokenized
 
     def encode(self, text):
@@ -255,7 +265,6 @@ class Syllable:
                 encoded_text.append(encoded)
             words.append(''.join(encoded_text))
         encoded = self.detokenize(words)
-        logging.debug(f"encoded: {encoded}")
         return encoded
 
     def decode(self, encoded_text):
@@ -265,7 +274,7 @@ class Syllable:
                 decoded_sent += ''.join([self.decoder_dict[ch] for ch in jamo.hangul_to_jamo(ch)])
             else:
                 decoded_sent += ch
-        return decoded_sent.replace('ᄋ', '')
+        return Base().decode(decoded_sent.replace('ᄋ', ''))
 
 
 class DoubleVowel:

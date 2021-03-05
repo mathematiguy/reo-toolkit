@@ -31,6 +31,9 @@ def test_all_caps():
 def test_comma():
     assert Syllable().decode(Syllable().encode('39 tiriti o pipitea,')) == '39 tiriti o pipitea,'
 
+def test_quotation_mark():
+    assert Syllable().decode(Syllable().encode("‘kua whānau. aue!’")) == "‘kua whānau. aue!’"
+
 def test_base_encode():
     assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
 
