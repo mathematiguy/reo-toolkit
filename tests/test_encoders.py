@@ -28,6 +28,9 @@ def test_bilingual_longsyllable():
 def test_all_caps():
     assert Base().decode(Base().encode('NGĀ MŌTEATEA')) == "NGĀ MŌTEATEA"
 
+def test_comma():
+    assert Syllable().decode(Syllable().encode('39 tiriti o pipitea,')) == '39 tiriti o pipitea,'
+
 def test_base_encode():
     assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
 
