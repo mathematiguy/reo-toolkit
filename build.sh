@@ -14,5 +14,5 @@ make test
 # Create .whl file
 python3 setup.py bdist_wheel --universal
 
-# Send the whl file to /output
-cp -r build/ /output
+# Send dist/ to /output
+cp -r dist/ /output
