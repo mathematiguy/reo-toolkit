@@ -10,3 +10,9 @@ python3 -c "import nltk;nltk.download('punkt', download_dir='/nltk_data')"
 
 # Run tests
 make test
+
+# Create .whl file
+python3 setup.py bdist_wheel --universal
+
+# Send the whl file to /output
+mv *.whl /output
