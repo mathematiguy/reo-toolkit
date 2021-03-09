@@ -132,53 +132,18 @@ class Diphthong:
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
 
-    def tokenize(self, text):
-        while len(text) > 0:
-            if not text[0] in alphabet:
-                yield text[0]
-                text = text[1:]
-            elif text[0] in consonants:
-                yield text[0]
-                text = text[1:]
-            elif text[0] in vowels:
-                if len(text) > 1 and text[1] in vowels:
-                    if text[:2] in self.encoder_dict.keys():
-                        yield text[:2]
-                        text = text[2:]
-                    else:
-                        yield text[0]
-                        text = text[1:]
-                else:
-                    yield text[0]
-                    text = text[1:]
-            else:
-                text = text[1:]
-                continue
-
     def encode(self, text):
-        text = Base().encode(text)
-        encoded_sents = []
-        for sent in text.split("\n"):
-            sent_encoded = []
-            for mora in self.tokenize(sent):
-                if mora in [" ", "-"]:
-                    sent_encoded.append(mora)
-                    continue
-                try:
-                    if len(mora) > 1 or mora == "f":
-                        sent_encoded.append(self.encoder_dict[mora])
-                        continue
-                except KeyError:
-                    logging.error("KeyError: mora {} not in encoder_dict".format(mora))
-                sent_encoded.append(mora)
-            text_encoded = ''.join(sent_encoded)
-            encoded_sents.append(text_encoded)
-        return '\n'.join(encoded_sents)
+        for k, v in self.encoder_dict.items():
+            text = text.replace(k, v)
+        return text
 
-    def decode(self, encoded_text):
-        for diphthong, mora in self.encoder_dict.items():
-             encoded_text = encoded_text.replace(mora, diphthong)
-        return Base().decode(encoded_text)
+    def decode(self, text):
+
+        for k, v in self.decoder_dict.items():
+            if k in text:
+                text = text.replace(k, v)
+
+        return text
 
 
 class Syllable:
