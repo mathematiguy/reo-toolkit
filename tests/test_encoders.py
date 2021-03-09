@@ -35,10 +35,10 @@ def test_quotation_mark():
     assert Syllable().decode(Syllable().encode("‘kua whānau. aue!’")) == "‘kua whānau. aue!’"
 
 def test_base_encode():
-    assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
+    assert Base().encode("Whiti mai te rangi") == "Ƒiti mai te raŋi"
 
 def test_base_decode():
-    assert Base().decode("Ƒiti mai te ra") == "Whiti mai te ra"
+    assert Base().decode("Ƒiti mai te raŋi") == "Whiti mai te rangi"
 
 def test_single_vowel_encode():
     assert SingleVowel().encode("Tēnā koe") == "Teenaa koe"

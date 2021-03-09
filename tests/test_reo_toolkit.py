@@ -37,6 +37,9 @@ def test_hyphen():
 def test_long_hyphenated_word():
     assert is_maori('Taumatawhakatangi-hangakoauauotamatea-turipukakapikimaunga-horonukupokaiwhenua-kitanatahu')
 
+def test_ng():
+    assert is_maori('ranginui')
+
 def test_non_maori_word():
     assert not is_maori('tongue', strict = False)
 
@@ -64,6 +67,9 @@ def test_all_caps():
 
 def test_alphanum():
     assert not is_maori('i18n')
+
+def test_number():
+    assert is_maori('2009')
 
 def test_te_tiriti_o_waitangi():
     with open('data/te-tiriti-o-waitangi.txt', 'r') as f:
