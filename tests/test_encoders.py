@@ -47,10 +47,10 @@ def test_single_vowel_decode():
     assert SingleVowel().decode("Teenaa koe") == "Tēnā koe"
 
 def test_diphthong_encode():
-    assert Diphthong().encode("Kua tae mai?") == "Kua tæ má?"
+    assert Diphthong().encode("Kua tae mai ngā iwi?") == "Kua tæ má ŋā iwi?"
 
 def test_diphthong_decode():
-    assert Diphthong().decode("Kua tæ má?") == "Kua tae mai?"
+    assert Diphthong().decode("Kua tæ má ngā iwi?") == "Kua tae mai ngā iwi?"
 
 def test_syllable_encode():
     assert Syllable().encode("Kei te pēhea koe?") == "케어 테 폐헤아 코에?"

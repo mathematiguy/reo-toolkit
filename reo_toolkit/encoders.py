@@ -156,6 +156,7 @@ class Diphthong:
                 continue
 
     def encode(self, text):
+        text = Base().encode(text)
         encoded_sents = []
         for sent in text.split("\n"):
             sent_encoded = []
@@ -177,7 +178,7 @@ class Diphthong:
     def decode(self, encoded_text):
         for diphthong, mora in self.encoder_dict.items():
              encoded_text = encoded_text.replace(mora, diphthong)
-        return encoded_text
+        return Base().decode(encoded_text)
 
 
 class Syllable:
