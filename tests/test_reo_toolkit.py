@@ -64,9 +64,9 @@ def test_all_caps():
 def test_te_tiriti_o_waitangi():
     with open('data/te-tiriti-o-waitangi.txt', 'r') as f:
         transcript = f.read()
-        assert is_maori(transcript)
+        assert is_maori(transcript, strict=False)
 
 def test_he_whakaputanga():
     with open('data/he-whakaputanga.txt', 'r') as f:
         transcript = f.read()
-        assert is_maori(transcript)
+        assert is_maori(transcript, strict=False)
