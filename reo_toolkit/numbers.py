@@ -1,14 +1,10 @@
 import re
+import warnings
 
 
 def convert_numbers(text):
     text = prepare_numbers(text)
-    while re.search('[0-9]*,?[0-9]{1,3}', text):
-        start, finish = re.search('[0-9]*,?[0-9]{1,3}', text).span()
-        text = text[:start] + digits_to_text(
-            int(text[start:finish].replace(",", ""))) + text[finish:]
-    return text
-
+    return re.sub('\d+', lambda x: digits_to_text(int(x.group())), text)
 
 def prepare_numbers(text):
     '''
@@ -17,7 +13,7 @@ def prepare_numbers(text):
     correct māori usage for each term.
     '''
     while True:
-        if "£" in text:
+        if re.search("£[0-9]+", text):
             start, finish = re.search("£[0-9]+", text).span()
             text = text[:start] + text[start +1:finish] + \
                 str.rstrip(" pāuna " + text[finish +1:])

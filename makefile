@@ -15,7 +15,7 @@ LOG_LEVEL ?= DEBUG
 .PHONY: test jupyter docker-login docker docker-push docker-pull enter enter-root
 
 test:
-	$(RUN) bash -c "coverage run --source reo_toolkit -m pytest -vv $(if $(MULTICORE), -n $(NUM_CORES)) --durations 10 --log-level $(LOG_LEVEL) && coverage report"
+	$(RUN) bash -c "coverage run --source reo_toolkit -m pytest -s -vv $(if $(MULTICORE), -n $(NUM_CORES)) --durations 10 --log-level $(LOG_LEVEL) && coverage report"
 
 daemon: DOCKER_ARGS= -dit --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --name="rdev"
 daemon:
@@ -35,19 +35,19 @@ jupyter:
 			python3 -c \
 			"from IPython.lib import passwd; print(passwd('$(JUPYTER_PASSWORD)'))")
 
-PROFILE ?= default
+AWS_PROFILE ?= default
 docker-login:
-	$(if $(HAS_AWS), eval $$(aws ecr get-login --no-include-email --profile $(PROFILE) --region ap-southeast-2 | sed 's|https://||'))
+	$(if $(HAS_AWS), eval $$(aws ecr get-login --no-include-email --profile $(AWS_PROFILE) --region ap-southeast-2 | sed 's|https://||'))
 
 docker: docker-login
 	docker build $(DOCKER_ARGS) --tag $(IMAGE):$(GIT_TAG) .
 	docker tag $(IMAGE):$(GIT_TAG) $(IMAGE):latest
 
-docker-push:
+docker-push: docker-login
 	docker push $(IMAGE):$(GIT_TAG)
 	docker push $(IMAGE):latest
 
-docker-pull:
+docker-pull: docker-login
 	docker pull $(IMAGE):$(GIT_TAG)
 	docker tag $(IMAGE):$(GIT_TAG) $(IMAGE):latest
 

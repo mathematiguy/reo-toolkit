@@ -1,31 +1,49 @@
-from reo_toolkit.encoders import NoEncoder, BaseEncoder, ShortmoraEncoder, MoraEncoder, SyllableEncoder
+import pandas as pd
+from tqdm import tqdm
+from reo_toolkit.encoders import *
 
-def test_no_encode():
-    assert NoEncoder().encode("Text") == "Text"
 
-def test_no_decode():
-    assert NoEncoder().decode("Text") == "Text"
+def test_bilingual():
+    bilingual_sent = "ko murray tōku ingoa"
+    assert Base().decode(Base().encode(bilingual_sent)) == bilingual_sent
+    assert Diphthong().decode(Diphthong().encode(bilingual_sent)) == bilingual_sent
+    assert SingleVowel().decode(SingleVowel().encode(bilingual_sent)) == bilingual_sent
+    assert DoubleVowel().decode(DoubleVowel().encode(bilingual_sent)) == bilingual_sent
+    assert Syllable().decode(Syllable().encode(bilingual_sent)) == bilingual_sent
+    assert LongSyllable().decode(LongSyllable().encode(bilingual_sent)) == bilingual_sent
 
 def test_base_encode():
-    assert BaseEncoder().encode("Whiti mai te ra") == "Ƒiti mai te ra"
+    assert Base().encode("Whiti mai te ra") == "Ƒiti mai te ra"
 
 def test_base_decode():
-    assert BaseEncoder().decode("Ƒiti mai te ra") == "Whiti mai te ra"
+    assert Base().decode("Ƒiti mai te ra") == "Whiti mai te ra"
 
-def test_shortmora_encode():
-    assert ShortmoraEncoder().encode("Tēnā koe") == "Teenaa koe"
+def test_single_vowel_encode():
+    assert SingleVowel().encode("Tēnā koe") == "Teenaa koe"
 
-def test_shortmora_decode():
-    assert ShortmoraEncoder().decode("Teenaa koe") == "Tēnā koe"
+def test_single_vowel_decode():
+    assert SingleVowel().decode("Teenaa koe") == "Tēnā koe"
 
-def test_mora_encode():
-    assert MoraEncoder().encode("Kua tae mai") == "Kua tæ má"
+def test_diphthong_encode():
+    assert Diphthong().encode("Kua tae mai?") == "Kua tæ má?"
 
-def test_mora_decode():
-    assert MoraEncoder().decode("Kua tæ má") == "Kua tae mai"
+def test_diphthong_decode():
+    assert Diphthong().decode("Kua tæ má?") == "Kua tae mai?"
 
 def test_syllable_encode():
-    assert SyllableEncoder().encode("Kei te pēhea koe?") == "케어 테 폐헤아 코에?"
+    assert Syllable().encode("Kei te pēhea koe?") == "케어 테 폐헤아 코에?"
 
 def test_syllable_decode():
-    assert SyllableEncoder().decode("케어 테 폐헤아 코에?") == "kei te pēhea koe?"
+    assert Syllable().decode("케어 테 폐헤아 코에?") == "kei te pēhea koe?"
+
+def test_double_vowel_encode():
+    assert DoubleVowel().encode("whiti mai te ra") == "ƨƝƥƝ ƟƯ ƥƛ Ƥƚ"
+
+def test_double_vowel_decode():
+    assert DoubleVowel().decode("ƨƝƥƝ ƟƯ ƥƛ Ƥƚ") == "whiti mai te ra"
+
+def test_long_syllable_encode():
+    assert LongSyllable().encode("whiti mai te ra") == "ʁʄ Ȯ ʎ ʙ"
+
+def test_long_syllable_decode():
+    assert LongSyllable().decode("ʁʄ Ȯ ʎ ʙ") == "whiti mai te ra"

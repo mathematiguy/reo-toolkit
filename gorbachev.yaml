@@ -1,1 +1,1 @@
-docker: 473856431958.dkr.ecr.ap-southeast-2.amazonaws.com/reo-toolkit:21be485
+docker: python:3

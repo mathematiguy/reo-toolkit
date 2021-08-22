@@ -1,7 +1,18 @@
 pytest
-nltk
 jamo
 inflection
 pyahocorasick
 coverage
+wheel
+PyYAML==3.12
+jupyter
+jupyterlab
+ipython
+pandas
+numpy
+matplotlib
+jsonlines
+pytest-xdist
+pytest-benchmark
+nltk
 -e /code
