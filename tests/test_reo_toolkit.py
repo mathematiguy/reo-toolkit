@@ -65,12 +65,12 @@ def test_all_caps():
 def test_te_tiriti_o_waitangi():
     with open('data/te-tiriti-o-waitangi.txt', 'r') as f:
         transcript = f.read()
-        assert is_maori(transcript, strict=False)
+        assert is_maori(transcript, strict=True)
 
 def test_he_whakaputanga():
     with open('data/he-whakaputanga.txt', 'r') as f:
         transcript = f.read()
-        assert is_maori(transcript, strict=False)
+        assert is_maori(transcript, strict=True)
 
 def test_sentence():
-    assert is_maori("inā tatū te tai ka puare tēnei toka ka taea te haere mai i reira ki uta", strict = False)
+    assert is_maori("inā tatū te tai ka puare tēnei toka ka taea te haere mai i reira ki uta", strict = True)
