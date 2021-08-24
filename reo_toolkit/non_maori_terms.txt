@@ -1,5 +1,3 @@
-aa
-aaa
 aerate
 aere
 aero
@@ -36,9 +34,7 @@ awake
 aware
 awoke
 eau
-ee
 eerie
-ei
 eia
 eine
 emanate
@@ -92,7 +88,6 @@ homeware
 homie
 homo
 hoo
-hope
 howe
 humane
 ie
@@ -183,7 +178,6 @@ mope
 moraine
 more
 moto
-mu
 murakami
 mutate
 mute
@@ -228,7 +222,6 @@ oa
 oahu
 oe
 ohio
-oi
 oio
 oki
 omaha
@@ -242,15 +235,12 @@ opine
 orange
 oratorio
 ore
-oro
-ou
 owe
 panama
 pane
 panini
 panorama
 papua
-para
 paranoia
 pate
 patina
@@ -288,7 +278,6 @@ rake
 range
 rao
 rape
-rare
 rate
 ratio
 re
@@ -303,7 +292,6 @@ rename
 rene
 renee
 reno
-repo
 repute
 reroute
 retake
@@ -316,10 +304,8 @@ rewire
 ri
 rio
 ripe
-ro
 roanoke
 roe
-roi
 roma
 romaine
 romania
@@ -334,7 +320,6 @@ roti
 route
 routine
 rowe
-ru
 rue
 ruminate
 rupee
@@ -354,13 +339,11 @@ teatime
 tee
 tenure
 tepee
-ti
 tiara
 tie
 time
 tinge
 tire
-tomato
 tome
 tone
 tongue
@@ -376,7 +359,6 @@ tue
 tune
 uae
 uke
-uma
 umami
 una
 unaware
@@ -396,7 +378,6 @@ wakame
 wake
 wane
 wapiti
-ware
 we
 wee
 weepie
