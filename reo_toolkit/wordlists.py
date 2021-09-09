@@ -7,7 +7,7 @@ def make_wordlist(filepath):
     with open(filepath, 'r') as f:
         wordlist = Automaton()
         for idx, word in enumerate(set(Base().encode(t) for t in f.read().split())):
-            wordlist.add_word(word, (idx, word))
+            wordlist.add_word(word.lower(), (idx, word))
             wordlist.make_automaton()
     return wordlist
 

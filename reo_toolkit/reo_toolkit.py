@@ -75,8 +75,7 @@ def is_maori(text, strict = True, verbose = False):
             return True
 
     if not strict:
-
-        if text.capitalize() in non_maori:
+        if text.lower() in non_maori:
             logging.debug("Text {} is in non_maori word list".format(text))
             return False
 
