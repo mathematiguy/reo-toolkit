@@ -21,20 +21,40 @@ ends_with_consonant = re.compile('[{}]+'.format(
 
 
 def is_maori(text, strict = True, verbose = False):
-    '''
-    Returns True if the text provided matches Māori orthographical rules.
+    """
+    Determine if a given text is in Māori language.
 
-    `strict` - If True, `is_maori` returns False whenever an orthography rule is broken.
-               If False, `is_maori` will use wordlists to reject common english words with
-               māori language orthography
+    This function evaluates whether a provided string adheres to the rules of the Māori language.
+    It performs checks for non-Māori characters, specific language patterns, and ensures that 
+    the text conforms to Māori phonotactics.
 
-    `verbose` - (default False) If `True` display debugging messages
+    Parameters:
+    text (str): The text to be evaluated.
+    strict (bool): If True, enforces stricter checks against a predefined non-Māori word list and ambiguous words. Defaults to True.
+    verbose (bool): If True, enables detailed debug output to the console. Defaults to False.
 
-    There should be two modes of matching:
-        - `Strong` means `is_maori` will return True only if it's certain the text is te reo māori.
-        - `Weak` means `is_maori` will return True only if it can't prove that the text is not te reo māori.
+    Returns:
+    bool: True if the text is determined to be Māori, False otherwise.
 
-    '''
+    Notes:
+    - The function handles camelCase text by splitting and evaluating each component separately.
+    - It uses regular expressions to identify and remove non-alphabetic characters, and to match 
+      specific Māori language patterns.
+    - It considers various edge cases such as empty strings after cleaning, single-character words, 
+      triple vowels, double consonants, and words ending with consonants.
+    - When `strict` is set to False, the function allows for some leniency in recognizing words 
+      that might be Māori.
+
+    Examples:
+    >>> is_maori("kia ora")
+    True
+    >>> is_maori("hello")
+    False
+    >>> is_maori("KiaOra", strict=False)
+    True
+    >>> is_maori("whakawhetai", verbose=True)
+    True
+    """
 
     if verbose:
         logging.debug = print
