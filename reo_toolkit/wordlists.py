@@ -13,3 +13,4 @@ def make_wordlist(filepath):
 
 ambiguous = make_wordlist(os.path.join(os.path.dirname(__file__), 'ambiguous_terms.txt'))
 non_maori = make_wordlist(os.path.join(os.path.dirname(__file__), 'non_maori_terms.txt'))
+stop_words = make_wordlist(os.path.join(os.path.dirname(__file__), 'stop_words.txt'))
