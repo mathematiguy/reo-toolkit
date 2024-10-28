@@ -1,4 +1,4 @@
-'''
+"""
 An alphabet derived from pairs of consonant+(vowel|long vowel|diphthong).
 Diphthong is as defined by te reo Māori speakers.
 
@@ -11,37 +11,35 @@ This alphabet was inspired by the way we learnt soungs growing up. When
 reading the polynesian alphabet, it's common to read the consonants as
 "he, ke, la, mu, pu, nu, we,". When practicing diphthongs, it oftens
 helps to practice them in context e.g. wai, kou, kau, tae.
-'''
+"""
 
 from unidecode import unidecode
 import re
 from random import random
 
-CONSONANTS = ['h', 'k', 'm', 'n', 'p', 'r', 't', 'w', 'ƒ', 'ŋ']
-VOWELS = ['a', 'e', 'i', 'o', 'u']
-LONG_VOWELS = ['ā', 'ē', 'ī', 'ō', 'ū']
+CONSONANTS = ["h", "k", "m", "n", "p", "r", "t", "w", "ƒ", "ŋ"]
+VOWELS = ["a", "e", "i", "o", "u"]
+LONG_VOWELS = ["ā", "ē", "ī", "ō", "ū"]
 DIPHTHONGS = [
-    'ae',
-    'ai',
-    'ao',
-    'au',
-    'ei',
-    'oi',
-    'oe',
-    'ou',
-    'āe',
-    'āi',
-    'āo',
-    'āu',
-    'ēi',
-    'ōi',
-    'ōe',
-    'ōu',
+    "ae",
+    "ai",
+    "ao",
+    "au",
+    "ei",
+    "oi",
+    "oe",
+    "ou",
+    "āe",
+    "āi",
+    "āo",
+    "āu",
+    "ēi",
+    "ōi",
+    "ōe",
+    "ōu",
 ]
 
-PREFIXES = [
-    ('ƒaka', '∑', ['ƒa', 'ka'])
-]
+PREFIXES = [("ƒaka", "∑", ["ƒa", "ka"])]
 
 
 def is_prefix(char):
@@ -59,40 +57,38 @@ def get_syll_for_prefix(prefix):
 
 def alphabet6():
     for mea in DIPHTHONGS + LONG_VOWELS + VOWELS:
-        for consonant in CONSONANTS + [' ']:
-            s = (consonant+mea).strip()
+        for consonant in CONSONANTS + [" "]:
+            s = (consonant + mea).strip()
             yield s
 
 
 def normalise(text):
     return (
-        text.replace('wh', 'ƒ')
-        .replace('ng', 'ŋ')
-        .replace('  ', ' ')
-        .replace('ƒaka', '∑')
+        text.replace("wh", "ƒ")
+        .replace("ng", "ŋ")
+        .replace("  ", " ")
+        .replace("ƒaka", "∑")
     )
 
 
 def denormalise(text):
-    return (
-        text.replace('ƒ', 'wh')
-        .replace('ŋ', 'ng')
-        .replace('∑', 'ƒaka')
-    )
+    return text.replace("ƒ", "wh").replace("ŋ", "ng").replace("∑", "ƒaka")
 
 
 def test_encode_to_syllables():
 
-    with open("/Volumes/GoogleDrive-102052350554870542074/Shared drives/Backup/Kōrero Māori Data/From Te Taka/Hiku/Google Maori Copora/KupuMI01.txt", 'r', encoding='utf8') as f:
+    with open(
+        "/Volumes/GoogleDrive-102052350554870542074/Shared drives/Backup/Kōrero Māori Data/From Te Taka/Hiku/Google Maori Copora/KupuMI01.txt",
+        "r",
+        encoding="utf8",
+    ) as f:
         line = f.readline()
         while line:
-            phrase = normalise(
-                line.strip().lower()
-            )
+            phrase = normalise(line.strip().lower())
 
             matches = []
-            munch = ''
-            chars = ''
+            munch = ""
+            chars = ""
             syllable = []
             for char in phrase:
                 munch += char
@@ -105,13 +101,13 @@ def test_encode_to_syllables():
                         syllable.append(matches[-1])
                     elif len(matches) == 1:
                         syllable.append(matches[0])
-                    if char in ['-', ' ']:
+                    if char in ["-", " "]:
                         syllable.append(char)
-                        munch = ''
+                        munch = ""
                         matches = []
                     elif is_prefix(char):
                         syllable += get_syll_for_prefix(char)
-                        munch = ''
+                        munch = ""
                         matches = []
                     else:
                         munch = munch[-1]
@@ -121,17 +117,13 @@ def test_encode_to_syllables():
             else:
                 syllable.append(munch)
 
-            phrase_syllable = (
-                '+'.join(syllable)
-                .replace('+ +', ' ')
-                .replace('+-+', '-')
-            )
+            phrase_syllable = "+".join(syllable).replace("+ +", " ").replace("+-+", "-")
 
-            if random() < 0.0005 or '∑utu' in phrase or 'aa' in phrase:
+            if random() < 0.0005 or "∑utu" in phrase or "aa" in phrase:
                 print(f"{denormalise(phrase)} || {denormalise(phrase_syllable)}")
 
-            a = unidecode(phrase.replace('∑', 'ƒaka'))
-            b = unidecode(phrase_syllable).replace('+', '')
+            a = unidecode(phrase.replace("∑", "ƒaka"))
+            b = unidecode(phrase_syllable).replace("+", "")
             if a != b:
                 print(phrase)
                 raise ValueError(f"{a} != {b}")

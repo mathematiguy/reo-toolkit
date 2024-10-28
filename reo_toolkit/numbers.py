@@ -4,29 +4,36 @@ import warnings
 
 def convert_numbers(text):
     text = prepare_numbers(text)
-    return re.sub('\d+', lambda x: digits_to_text(int(x.group())), text)
+    return re.sub("\d+", lambda x: digits_to_text(int(x.group())), text)
+
 
 def prepare_numbers(text):
-    '''
+    """
     This function removes dollar ($) and pound (£) symbols
     and also percent (%) symbols, replacing the text with the
     correct māori usage for each term.
-    '''
+    """
     while True:
         if re.search("£[0-9]+", text):
             start, finish = re.search("£[0-9]+", text).span()
-            text = text[:start] + text[start +1:finish] + \
-                str.rstrip(" pāuna " + text[finish +1:])
+            text = (
+                text[:start]
+                + text[start + 1 : finish]
+                + str.rstrip(" pāuna " + text[finish + 1 :])
+            )
         elif "$" in text:
             start, finish = re.search(r"\$[0-9]+", text).span()
-            text = text[:start] + text[start +1:finish] + \
-                   str.rstrip(" tāra " + text[finish + 1:])
+            text = (
+                text[:start]
+                + text[start + 1 : finish]
+                + str.rstrip(" tāra " + text[finish + 1 :])
+            )
         elif re.search(r"[0-9]\-[0-9]", text):
             start, finish = re.search(r"[0-9]\-[0-9]", text).span()
-            text = text[:start + 1] + ' ki te ' + text[finish - 1:]
+            text = text[: start + 1] + " ki te " + text[finish - 1 :]
         elif re.search("[0-9]%", text):
             start, finish = re.search("[0-9]%", text).span()
-            text = text[:start + 1] + ' paihēneti' + text[finish:]
+            text = text[: start + 1] + " paihēneti" + text[finish:]
         else:
             break
     return text
@@ -40,11 +47,8 @@ def digits_to_text(num, warn=True):
 
     digits = [int(i) for i in str(num)]
 
-    ones = [
-        'kore', 'tahi', 'rua', 'toru', 'whā', 'rima',
-        'ono', 'whitu', 'waru', 'iwa'
-    ]
-    places = ['rau', 'tekau', 'mano', 'rau', 'tekau', '']
+    ones = ["kore", "tahi", "rua", "toru", "whā", "rima", "ono", "whitu", "waru", "iwa"]
+    places = ["rau", "tekau", "mano", "rau", "tekau", ""]
 
     ones_dict = dict(zip([i for i in range(10)], ones))
     places_dict = dict(zip([5, 4, 3, 2, 1, 0], places))
@@ -60,7 +64,7 @@ def digits_to_text(num, warn=True):
                 digit_words += ["mano"]
             continue
 
-        if place_digit in ['rau', 'mano'] and ones_digit == 'tahi':
+        if place_digit in ["rau", "mano"] and ones_digit == "tahi":
             ones_digit = "kotahi"
         elif place in [0, 3]:
             ones_digit = "mā " + ones_digit
@@ -69,7 +73,7 @@ def digits_to_text(num, warn=True):
 
         digit_words.append(place_words)
 
-    digit_text = ' '.join(digit_words[::-1])
+    digit_text = " ".join(digit_words[::-1])
 
     digit_text = re.sub("tahi tekau", "tekau", digit_text)
     digit_text = re.sub("mano kotahi", "mano", digit_text)

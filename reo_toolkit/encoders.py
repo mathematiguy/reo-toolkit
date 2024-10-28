@@ -11,42 +11,39 @@ from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 from .letters import vowels, consonants, alphabet
 
+
 def get_encoder(name):
     available_encoders = [
-        'base', 'single_vowel', 'diphthong', 'syllable', 'double_vowel', 'long_syllable'
+        "base",
+        "single_vowel",
+        "diphthong",
+        "syllable",
+        "double_vowel",
+        "long_syllable",
     ]
-    assert name in available_encoders,\
-        "Invalid encoder! Choose one of '{}', '{}', '{}', '{}', '{}' or '{}'"\
-        .format(*available_encoders)
+    assert (
+        name in available_encoders
+    ), "Invalid encoder! Choose one of '{}', '{}', '{}', '{}', '{}' or '{}'".format(
+        *available_encoders
+    )
 
-    encoder = ''.join(map(str.title, name.split('_')))
+    encoder = "".join(map(str.title, name.split("_")))
     return getattr(sys.modules[__name__], encoder)()
 
 
 class Base:
 
-    encoder_dict = {
-        'N[Gg]': 'Ŋ',
-        'W[Hh]': 'Ƒ',
-        'ng': 'ŋ',
-        'wh': 'ƒ'
-    }
+    encoder_dict = {"N[Gg]": "Ŋ", "W[Hh]": "Ƒ", "ng": "ŋ", "wh": "ƒ"}
 
-    decoder_dict = {
-        'Ŋ': 'Ng',
-        'Ƒ': 'Wh',
-        'ŋ': 'ng',
-        'ƒ': 'wh'
-    }
+    decoder_dict = {"Ŋ": "Ng", "Ƒ": "Wh", "ŋ": "ng", "ƒ": "wh"}
 
     def detokenize(self, words):
         detokenized = TreebankWordDetokenizer().detokenize(words)
-        for punct in [',', '\\.', '\\?', '!', ':', ';']:
-            detokenized = re.sub('[ ]+'+punct, punct.replace("\\", ""), detokenized)
-        detokenized = re.sub('‘ ', '‘', detokenized)
-        detokenized = re.sub(' ’', '’', detokenized)
+        for punct in [",", "\\.", "\\?", "!", ":", ";"]:
+            detokenized = re.sub("[ ]+" + punct, punct.replace("\\", ""), detokenized)
+        detokenized = re.sub("‘ ", "‘", detokenized)
+        detokenized = re.sub(" ’", "’", detokenized)
         return detokenized
-
 
     def encode(self, text):
         for k, v in self.encoder_dict.items():
@@ -58,11 +55,11 @@ class Base:
             text = re.sub(k, v, text)
         words = []
         for word in TreebankWordTokenizer().tokenize(text):
-            if 'Ng' in word:
+            if "Ng" in word:
                 temp = word.replace("Ng", "")
                 if temp.upper() == temp:
                     word = word.replace("Ng", "NG")
-            if 'Wh' in word:
+            if "Wh" in word:
                 temp = word.replace("Wh", "")
                 if temp.upper() == temp:
                     word = word.replace("Wh", "WH")
@@ -73,23 +70,23 @@ class Base:
 class SingleVowel:
 
     encoder_dict = {
-        'ā': 'aa',
-        'ē': 'ee',
-        'ī': 'ii',
-        'ō': 'oo',
-        'ū': 'uu',
-        'ng': 'ŋ',
-        'wh': 'ƒ',
-        'Ā': 'Aa',
-        'Ē': 'Ee',
-        'Ī': 'Ii',
-        'Ō': 'Oo',
-        'Ū': 'Uu',
-        'NG': 'Ŋ',
-        'WH': 'Ƒ'
+        "ā": "aa",
+        "ē": "ee",
+        "ī": "ii",
+        "ō": "oo",
+        "ū": "uu",
+        "ng": "ŋ",
+        "wh": "ƒ",
+        "Ā": "Aa",
+        "Ē": "Ee",
+        "Ī": "Ii",
+        "Ō": "Oo",
+        "Ū": "Uu",
+        "NG": "Ŋ",
+        "WH": "Ƒ",
     }
 
-    decoder_dict = {v:k for k,v in encoder_dict.items()}
+    decoder_dict = {v: k for k, v in encoder_dict.items()}
 
     def encode(self, text):
         for k, v in self.encoder_dict.items():
@@ -108,26 +105,26 @@ class SingleVowel:
 class Diphthong:
 
     encoder_dict = {
-        'ae': 'æ',
-        'ai': 'á',
-        'ao': 'å',
-        'au': 'ä',
-        'ei': 'é',
-        'oe': 'œ',
-        'oi': 'ó',
-        'ou': 'ö',
-        'ng': 'ŋ',
-        'wh': 'ƒ',
-        'AE': 'Æ',
-        'AI': 'Á',
-        'AO': 'Å',
-        'AU': 'Ä',
-        'EI': 'É',
-        'OE': 'Œ',
-        'OI': 'Ó',
-        'OU': 'Ö',
-        'NG': 'Ŋ',
-        'WH': 'Ƒ',
+        "ae": "æ",
+        "ai": "á",
+        "ao": "å",
+        "au": "ä",
+        "ei": "é",
+        "oe": "œ",
+        "oi": "ó",
+        "ou": "ö",
+        "ng": "ŋ",
+        "wh": "ƒ",
+        "AE": "Æ",
+        "AI": "Á",
+        "AO": "Å",
+        "AU": "Ä",
+        "EI": "É",
+        "OE": "Œ",
+        "OI": "Ó",
+        "OU": "Ö",
+        "NG": "Ŋ",
+        "WH": "Ƒ",
     }
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
@@ -149,38 +146,38 @@ class Diphthong:
 class Syllable:
 
     encoder_dict = {
-        'a': 'ᅡ',
-        'ā': 'ᅣ',
-        'ē': 'ᅨ',
-        'e': 'ᅦ',
-        'i': 'ᅥ',
-        'ī': 'ᅧ',
-        'o': 'ᅩ',
-        'ō': 'ᅭ',
-        'u': 'ᅮ',
-        'ū': 'ᅲ',
-        'h': 'ᄒ',
-        'k': 'ᄏ',
-        'm': 'ᄆ',
-        'n': 'ᄂ',
-        'p': 'ᄑ',
-        'r': 'ᄅ',
-        't': 'ᄐ',
-        'w': 'ᄇ',
-        'ŋ': 'ᄉ',
-        'ƒ': 'ᄌ',
-        'ᄋ': 'ᄋ'
+        "a": "ᅡ",
+        "ā": "ᅣ",
+        "ē": "ᅨ",
+        "e": "ᅦ",
+        "i": "ᅥ",
+        "ī": "ᅧ",
+        "o": "ᅩ",
+        "ō": "ᅭ",
+        "u": "ᅮ",
+        "ū": "ᅲ",
+        "h": "ᄒ",
+        "k": "ᄏ",
+        "m": "ᄆ",
+        "n": "ᄂ",
+        "p": "ᄑ",
+        "r": "ᄅ",
+        "t": "ᄐ",
+        "w": "ᄇ",
+        "ŋ": "ᄉ",
+        "ƒ": "ᄌ",
+        "ᄋ": "ᄋ",
     }
 
     decoder_dict = {v: k for k, v in encoder_dict.items()}
 
-    def __init__(self, vowel_type = 'long'):
+    def __init__(self, vowel_type="long"):
         self.vowel_type = vowel_type
 
     def preprocess(self, text, vowel_type):
         # Syllable encoder only supports lowercase text
         text = text.lower()
-        if vowel_type == 'short':
+        if vowel_type == "short":
             text = SingleVowel().encode(text)
         return Base().encode(text)
 
@@ -188,28 +185,29 @@ class Syllable:
         for i, ch in enumerate(text):
             if ch not in alphabet:
                 yield ch
-            elif ch == '-':
+            elif ch == "-":
                 yield ch
-            elif ch in vowels and text[i-1] not in consonants:
+            elif ch in vowels and text[i - 1] not in consonants:
                 # ch is a vowel and the preceding char is not a consonant
                 yield ch
             elif ch in consonants:
                 # ch is a consonant
-                yield text[i:i+2]
+                yield text[i : i + 2]
 
     def detokenize(self, words):
-        detokenized = ' '.join(words)
-        for punct in [',', '\\.', '\\?', '!', ':', ';']:
-            detokenized = re.sub('[ ]+'+punct, punct.replace("\\", ""), detokenized)
-        detokenized = re.sub('‘ ', '‘', detokenized)
-        detokenized = re.sub(' ’', '’', detokenized)
+        detokenized = " ".join(words)
+        for punct in [",", "\\.", "\\?", "!", ":", ";"]:
+            detokenized = re.sub("[ ]+" + punct, punct.replace("\\", ""), detokenized)
+        detokenized = re.sub("‘ ", "‘", detokenized)
+        detokenized = re.sub(" ’", "’", detokenized)
         return detokenized
 
     def encode(self, text):
-        text = self.preprocess(text, vowel_type = self.vowel_type)
+        text = self.preprocess(text, vowel_type=self.vowel_type)
         words = []
         for word in TreebankWordTokenizer().tokenize(text):
             from reo_toolkit import is_maori
+
             if not is_maori(word):
                 words.append(word)
                 continue
@@ -219,37 +217,48 @@ class Syllable:
                     encoded_text.append(syllable)
                     continue
                 if syllable in vowels:
-                    syllable = 'ᄋ' + syllable
+                    syllable = "ᄋ" + syllable
                 try:
-                    consonant, vowel = ''.join([self.encoder_dict[ch] for ch in syllable])
+                    consonant, vowel = "".join(
+                        [self.encoder_dict[ch] for ch in syllable]
+                    )
                 except KeyError:
-                    logging.error("KeyError: phoneme {} not in encoder_dict".format(syllable))
+                    logging.error(
+                        "KeyError: phoneme {} not in encoder_dict".format(syllable)
+                    )
                     raise KeyError
                 try:
                     encoded = jamo.j2h(consonant, vowel)
                 except jamo.InvalidJamoError:
-                    logging.error('InvalidJamoError - Consonant={} Vowel={} Syllable={}'.format(consonant, vowel, syllable))
+                    logging.error(
+                        "InvalidJamoError - Consonant={} Vowel={} Syllable={}".format(
+                            consonant, vowel, syllable
+                        )
+                    )
                 encoded_text.append(encoded)
-            words.append(''.join(encoded_text))
+            words.append("".join(encoded_text))
         encoded = self.detokenize(words)
         return encoded
 
     def decode(self, encoded_text):
-        decoded_sent = ''
+        decoded_sent = ""
         for ch in encoded_text:
             if jamo.is_hangul_char(ch):
-                decoded_sent += ''.join([self.decoder_dict[ch] for ch in jamo.hangul_to_jamo(ch)])
+                decoded_sent += "".join(
+                    [self.decoder_dict[ch] for ch in jamo.hangul_to_jamo(ch)]
+                )
             else:
                 decoded_sent += ch
-        return Base().decode(decoded_sent.replace('ᄋ', ''))
+        return Base().decode(decoded_sent.replace("ᄋ", ""))
 
 
 class DoubleVowel:
-
     def __init__(self):
         self.encoder_dict = json.loads(
-            pkgutil.get_data(__name__, 'double_vowel.json'), object_pairs_hook=OrderedDict)
-        self.decoder_dict = {v:k for k,v in self.encoder_dict.items()}
+            pkgutil.get_data(__name__, "double_vowel.json"),
+            object_pairs_hook=OrderedDict,
+        )
+        self.decoder_dict = {v: k for k, v in self.encoder_dict.items()}
 
     def encode(self, text):
         text = Base().encode(text)
@@ -258,9 +267,9 @@ class DoubleVowel:
         return text
 
     def decode(self, encoded):
-        decoded = ''
+        decoded = ""
         for ch in encoded:
-            if ch == ' ':
+            if ch == " ":
                 decoded += ch
                 continue
             try:
@@ -271,10 +280,12 @@ class DoubleVowel:
 
 
 class LongSyllable:
-
     def __init__(self):
-        self.encoder_dict = json.loads(pkgutil.get_data(__name__, 'long_syllable.json'), object_pairs_hook=OrderedDict)
-        self.decoder_dict = {v:k for k,v in self.encoder_dict.items()}
+        self.encoder_dict = json.loads(
+            pkgutil.get_data(__name__, "long_syllable.json"),
+            object_pairs_hook=OrderedDict,
+        )
+        self.decoder_dict = {v: k for k, v in self.encoder_dict.items()}
 
     def encode(self, text):
         text = Base().encode(text)
@@ -283,9 +294,9 @@ class LongSyllable:
         return text
 
     def decode(self, encoded):
-        decoded = ''
+        decoded = ""
         for ch in encoded:
-            if ch == ' ':
+            if ch == " ":
                 decoded += ch
                 continue
             try:
