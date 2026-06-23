@@ -1,6 +1,7 @@
 import os
 import re
 import logging
+import unicodedata
 
 from inflection import camelize
 from functools import lru_cache
@@ -9,6 +10,7 @@ from .utils import is_camel_case, camel_case_split
 from .wordlists import ambiguous, non_maori
 from .encoders import Base
 from .letters import vowels, consonants, alphabet, numbers
+
 
 double_consonants = re.compile("[{}][^{}]".format("".join(consonants), "".join(vowels)))
 non_maori_letters = re.compile("[ʻbcdfgjlqsvxyz]", re.IGNORECASE)
@@ -79,8 +81,15 @@ def is_maori(text, strict=True, verbose=False):
     raw_text = text
     text = Base().encode(text)
 
+    _VALID_NON_ASCII = set('āēīōūĀĒĪŌŪƒŋ')
+    for c in text:
+        if ord(c) > 127 and unicodedata.category(c).startswith('L') and c not in _VALID_NON_ASCII:
+            logging.debug(f"Non-Māori Unicode letter '{c}' (U+{ord(c):04X}) found in '{text}'")
+            return False
+
     # Match letters found not in the māori alphabet
     non_maori_letters_result = non_maori_letters.search(text)
+
     if non_maori_letters_result:
         logging.debug(
             "Letter '{}' not in maori character set".format(
